@@ -90,8 +90,8 @@ const vueConfig = {
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
     proxy: {
       '/api/*': {
-        target:'http://localhost:3000',
-        // target:'http://202.206.212.212:9000',
+        // target:'http://localhost:3000',
+        target:'http://202.206.212.212:9000',
         changeOrigin: true
       }
     }
