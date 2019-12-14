@@ -203,9 +203,9 @@ export const asyncRouterMap = [
             meta: { title: '个人荐读', keepAlive: true, permission: [ 'user' ] }
           },
           {
-            path: '/account/find',
-            name: 'find',
-            component: () => import('@/views/account/find'),
+            path: '/account/search',
+            name: 'search',
+            component: () => import('@/views/account/search'),
             meta: { title: '书籍查询', keepAlive: true, permission: [ 'user' ] }
           }
         ]
