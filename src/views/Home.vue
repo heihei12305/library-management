@@ -1,215 +1,205 @@
 <template>
-  <div class="home">
-    <div class="banner">
-      <img alt="Vue logo" style="width: 64px; height: 64px" src="../assets/logo.png">
-      <h3 style="margin-top: 1rem">Welcome to Your Vue.js App</h3>
+  <page-view :avatar="avatar" :title="false">
+    <div slot="headerContent">
+      <div class="title">{{ timeFix }}，{{ user.name }}<span class="welcome-text">，{{ welcome }}</span></div>
+      <div>前端工程师 | 蚂蚁金服 - 某某某事业群 - VUE平台</div>
     </div>
-
-    <br/>
-
-    <h2># Trend 组件 </h2>
-
-    <a-divider> 正常 </a-divider>
-
-    <a-card>
-
-      <trend flag="up" style="margin-right: 16px;">
-        <span slot="term">工资</span>
-        5%
-      </trend>
-      <trend flag="up" style="margin-right: 16px;">
-        <span slot="term">工作量</span>
-        50%
-      </trend>
-      <trend flag="down">
-        <span slot="term">身体状态</span>
-        50%
-      </trend>
-
-    </a-card>
-
-    <a-divider> 颜色反转 </a-divider>
-
-    <a-card style="margin-bottom: 3rem">
-
-      <trend flag="up" :reverse-color="true" style="margin-right: 16px;">
-        <span slot="term">工资</span>
-        5%
-      </trend>
-      <trend flag="down" :reverse-color="true" style="margin-right: 16px;">
-        <span slot="term">工作量</span>
-        50%
-      </trend>
-
-    </a-card>
-
-    <h2># AvatarList 组件 </h2>
-
-    <a-divider> AvatarList </a-divider>
-    <a-card style="margin-bottom: 3rem">
-      <avatar-list :max-length="3">
-        <avatar-list-item tips="Jake" src="https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png" />
-        <avatar-list-item tips="Andy" src="https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png" />
-        <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
-        <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
-        <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
-        <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
-        <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
-
-      </avatar-list>
-
-      <a-divider type="vertical" style="margin: 0 16px" />
-
-      <avatar-list size="mini">
-        <avatar-list-item tips="Jake" src="https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png" />
-        <avatar-list-item tips="Andy" src="https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png" />
-        <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
-      </avatar-list>
-    </a-card>
-
-    <h2># CountDown 组件 </h2>
-
-    <a-divider> CountDown </a-divider>
-    <a-card style="margin-bottom: 3rem">
-      <count-down
-        style="font-size: 2rem"
-        :target="new Date().getTime() + 3000000"
-        :on-end="onEndHandle">
-      </count-down>
-
-      <a-divider type="vertical" style="margin: 0 16px" />
-
-      <count-down
-        style="font-size: 2rem"
-        :target="new Date().getTime() + 10000"
-        :on-end="onEndHandle2">
-      </count-down>
-    </a-card>
-
-    <h2># Ellipsis 组件 </h2>
-
-    <a-divider> Ellipsis </a-divider>
-    <a-card style="margin-bottom: 3rem">
-      <ellipsis :length="100" tooltip>
-        There were injuries alleged in three cases in 2015, and a
-        fourth incident in September, according to the safety recall report. After meeting with US regulators in October, the firm decided to issue a voluntary recall.
-      </ellipsis>
-    </a-card>
-
-    <h2># NumberInfo 组件 </h2>
-
-    <a-divider> NumberInfo </a-divider>
-    <a-card style="margin-bottom: 3rem">
-      <number-info
-        :sub-title="() => { return 'Visits this week' }"
-        :total="12321"
-        status="up"
-        :sub-total="17.1"></number-info>
-    </a-card>
-
-    <h2># TagSelect 组件 </h2>
-
-    <a-divider> TagSelect </a-divider>
-    <a-card style="margin-bottom: 3rem">
-      <tag-select>
-        <tag-select-option value="cat1">类目1</tag-select-option>
-        <tag-select-option value="cat2">类目2</tag-select-option>
-        <tag-select-option value="cat3">类目3</tag-select-option>
-        <tag-select-option value="cat4">类目4</tag-select-option>
-        <tag-select-option value="cat5">类目5</tag-select-option>
-        <tag-select-option value="cat6">类目6</tag-select-option>
-        <tag-select-option value="cat7">类目7</tag-select-option>
-      </tag-select>
-    </a-card>
-
-    <h2># DescriptionList 组件 </h2>
-
-    <a-divider> DescriptionList </a-divider>
-    <a-card style="margin-bottom: 3rem">
-      <description-list title="组名称" size="small">
-        <description-list-item term="负责人">林东东</description-list-item>
-        <description-list-item term="角色码">1234567</description-list-item>
-        <description-list-item term="所属部门">XX公司-YY部</description-list-item>
-        <description-list-item term="过期时间">2018-08-08</description-list-item>
-        <description-list-item term="描述">这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...</description-list-item>
-      </description-list>
-    </a-card>
-
-    <a-divider> TagCloud </a-divider>
-    <a-card style="margin-bottom: 3rem">
-      <tag-cloud :tag-list="tagCloudData"></tag-cloud>
-    </a-card>
-  </div>
+  </page-view>
 </template>
 
 <script>
-// @ is an alias to /src
+import { timeFix } from '@/utils/util'
+import { mapState } from 'vuex'
 
-import Trend from '@/components/Trend'
-import AvatarList from '@/components/AvatarList'
-import CountDown from '@/components/CountDown/CountDown'
-import Ellipsis from '@/components/Ellipsis'
-import NumberInfo from '@/components/NumberInfo'
-import TagSelect from '@/components/TagSelect'
-import { DescriptionList, TagCloud } from '@/components/'
+import { PageView } from '@/layouts'
+import HeadInfo from '@/components/tools/HeadInfo'
+import { Radar } from '@/components'
 
-const AvatarListItem = AvatarList.AvatarItem
-const TagSelectOption = TagSelect.Option
-
-const DescriptionListItem = DescriptionList.Item
+// import { getRoleList, getServiceList } from '@/api/manage'
 
 export default {
-  name: 'Home',
+  name: 'Workplace',
   components: {
-    NumberInfo,
-    Ellipsis,
-    CountDown,
-    Trend,
-    AvatarList,
-    AvatarListItem,
-    TagSelect,
-    TagSelectOption,
-    TagCloud,
-    DescriptionList,
-    DescriptionListItem
+    PageView,
+    HeadInfo,
+    Radar
   },
   data () {
     return {
-      targetTime: new Date().getTime() + 3900000,
-      tagCloudData: []
+      timeFix: timeFix(),
+      avatar: '',
+      user: {},
+
+      loading: true,
+
+      // data
+      axis1Opts: {
+        dataKey: 'item',
+        line: null,
+        tickLine: null,
+        grid: {
+          lineStyle: {
+            lineDash: null
+          },
+          hideFirstLine: false
+        }
+      },
+      axis2Opts: {
+        dataKey: 'score',
+        line: null,
+        tickLine: null,
+        grid: {
+          type: 'polygon',
+          lineStyle: {
+            lineDash: null
+          }
+        }
+      },
+      scale: [{
+        dataKey: 'score',
+        min: 0,
+        max: 80
+      }],
+      axisData: [
+        { item: '引用', a: 70, b: 30, c: 40 },
+        { item: '口碑', a: 60, b: 70, c: 40 },
+        { item: '产量', a: 50, b: 60, c: 40 },
+        { item: '贡献', a: 40, b: 50, c: 40 },
+        { item: '热度', a: 60, b: 70, c: 40 },
+        { item: '引用', a: 70, b: 50, c: 40 }
+      ]
+    }
+  },
+  computed: {
+    ...mapState({
+      nickname: (state) => state.user.nickname,
+      welcome: (state) => state.user.welcome
+    }),
+    userInfo () {
+      return this.$store.getters.userInfo
     }
   },
   created () {
-    this.getTagCloudData()
+    this.user = this.userInfo
+    this.avatar = this.userInfo.avatar
+  },
+  mounted () {
   },
   methods: {
-    onEndHandle () {
-      this.$message.success('CountDown callback!!!')
-    },
-    onEndHandle2 () {
-      this.$notification.open({
-        message: 'Notification Title',
-        description: 'This is the content of the notification. This is the content of the notification. This is the content of the notification.'
-      })
-    },
-    getTagCloudData () {
-      this.$http.get('/data/antv/tag-cloud').then(res => {
-        this.tagCloudData = res.result
-      })
-    }
   }
 }
 </script>
 
-<style scoped>
-  .home {
-    width: 900px;
-    margin: 0 auto;
-    padding: 25px 0;
+<style lang="less" scoped>
+  .project-list {
+
+    .card-title {
+      font-size: 0;
+
+      a {
+        color: rgba(0, 0, 0, 0.85);
+        margin-left: 12px;
+        line-height: 24px;
+        height: 24px;
+        display: inline-block;
+        vertical-align: top;
+        font-size: 14px;
+
+        &:hover {
+          color: #1890ff;
+        }
+      }
+    }
+    .card-description {
+      color: rgba(0, 0, 0, 0.45);
+      height: 44px;
+      line-height: 22px;
+      overflow: hidden;
+    }
+    .project-item {
+      display: flex;
+      margin-top: 8px;
+      overflow: hidden;
+      font-size: 12px;
+      height: 20px;
+      line-height: 20px;
+      a {
+        color: rgba(0, 0, 0, 0.45);
+        display: inline-block;
+        flex: 1 1 0;
+
+        &:hover {
+          color: #1890ff;
+        }
+      }
+      .datetime {
+        color: rgba(0, 0, 0, 0.25);
+        flex: 0 0 auto;
+        float: right;
+      }
+    }
+    .ant-card-meta-description {
+      color: rgba(0, 0, 0, 0.45);
+      height: 44px;
+      line-height: 22px;
+      overflow: hidden;
+    }
   }
-  .home > .banner {
-    text-align: center;
-    padding: 25px 0;
-    margin: 25px 0;
+
+  .item-group {
+    padding: 20px 0 8px 24px;
+    font-size: 0;
+    a {
+      color: rgba(0, 0, 0, 0.65);
+      display: inline-block;
+      font-size: 14px;
+      margin-bottom: 13px;
+      width: 25%;
+    }
   }
+
+  .members {
+    a {
+      display: block;
+      margin: 12px 0;
+      line-height: 24px;
+      height: 24px;
+      .member {
+        font-size: 14px;
+        color: rgba(0, 0, 0, .65);
+        line-height: 24px;
+        max-width: 100px;
+        vertical-align: top;
+        margin-left: 12px;
+        transition: all 0.3s;
+        display: inline-block;
+      }
+      &:hover {
+        span {
+          color: #1890ff;
+        }
+      }
+    }
+  }
+
+  .mobile {
+
+    .project-list {
+
+      .project-card-grid {
+        width: 100%;
+      }
+    }
+
+    .more-info {
+      border: 0;
+      padding-top: 16px;
+      margin: 16px 0 16px;
+    }
+
+    .headerContent .title .welcome-text {
+      display: none;
+    }
+  }
+
 </style>

@@ -3,6 +3,7 @@ import { login, getInfo, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
+let userName = ''
 const user = {
   state: {
     token: '',
@@ -35,6 +36,8 @@ const user = {
   actions: {
     // 登录
     Login ({ commit }, userInfo) {
+      console.log(userInfo.username)
+      userName = userInfo.username
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
           const result = response.result
@@ -50,7 +53,7 @@ const user = {
     // 获取用户信息
     GetInfo ({ commit }) {
       return new Promise((resolve, reject) => {
-        getInfo().then(response => {
+        getInfo(userName).then(response => {
           const result = response.result
 
           if (result.role && result.role.permissions.length > 0) {

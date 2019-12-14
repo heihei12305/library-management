@@ -7,11 +7,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store/'
 import { VueAxios } from './utils/request'
-
-// mock
-// WARNING: `mockjs` NOT SUPPORT `IE` PLEASE DO NOT USE IN `production` ENV.
-import './mock'
-
 import bootstrap from './core/bootstrap'
 import './core/lazy_use'
 import './permission' // permission control

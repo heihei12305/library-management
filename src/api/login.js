@@ -14,7 +14,7 @@ import { axios } from '@/utils/request'
  */
 export function login (parameter) {
   return axios({
-    url: '/auth/login',
+    url: '/user/login',
     method: 'post',
     data: parameter
   })
@@ -28,12 +28,12 @@ export function getSmsCaptcha (parameter) {
   })
 }
 
-export function getInfo () {
+export function getInfo (parameter) {
   return axios({
     url: '/user/info',
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
+    method: 'post',
+    data: {
+      'username': parameter
     }
   })
 }
@@ -47,7 +47,7 @@ export function getCurrentUserNav (token) {
 
 export function logout () {
   return axios({
-    url: '/auth/logout',
+    url: '/user/logout',
     method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'

@@ -1,117 +1,207 @@
 <template>
-  <div>
-    <h2>本页面内容均为测试功能，暂不提供稳定性保证</h2>
-    <a-divider />
-    <div class="multi-tab-test">
-      <h4>多标签组件测试功能</h4>
-      <a-button @click="handleCloseCurrentTab" style="margin-right: 16px;">关闭当前页</a-button>
-      <a-button @click="handleOpenTab" style="margin-right: 16px;">打开 任务列表</a-button>
-      <a-popconfirm :visible="visible" @confirm="confirm" @cancel="cancel" okText="确定" cancelText="取消">
-        <template v-slot:title>
-          <div>
-            <a-form :form="form" layout="inline">
-              <a-form-item label="自定义名称">
-                <a-input v-decorator="['tabName', {rules: [{required: true, message: '请输入新的 Tab 名称'}]}]"/>
-              </a-form-item>
-            </a-form>
-          </div>
-        </template>
-        <a-button @click="() => visible = !visible" style="margin-right: 16px;">修改当前 Tab 名称</a-button>
-      </a-popconfirm>
-
-      <a-popconfirm :visible="visible2" @confirm="confirm2" @cancel="() => visible2 = false" okText="确定" cancelText="取消">
-        <template v-slot:title>
-          <div>
-            <p>页面 KEY 是由页面的路由 <code>path</code> 决定的</p>
-            <p>如果要修改某一个页面标题，该页面必须已经被打开在 Tab 栏</p>
-            <p>后期可以考虑优化到编程式 Tab 栏，就可以没有这种限制</p>
-            <a-form :form="form2" layout="inline">
-              <a-form-item label="页面KEY">
-                <a-input v-decorator="['tabKey', { initialValue: '/dashboard/workplace' }]" />
-              </a-form-item>
-              <a-form-item label="自定义名称">
-                <a-input v-decorator="['tabName', {rules: [{required: true, message: '请输入新的 Tab 名称'}]}]"/>
-              </a-form-item>
-            </a-form>
-          </div>
-        </template>
-        <a-button @click="() => visible2 = !visible2">修改某一个 Tab 名称</a-button>
-      </a-popconfirm>
-    </div>
-    <a-divider />
-    <div class="page-loading-test">
-      <h4>全局遮罩测试</h4>
-      <a-button @click="handleOpenLoading" style="margin-right: 16px;">打开遮罩(5s 自动关闭)</a-button>
-      <a-button @click="handleOpenLoadingCustomTip">打开遮罩(自定义提示语)</a-button>
-    </div>
+  <div id="components-form-demo-advanced-search">
+    <div>手动输入：</div>
+    <a-form class="ant-advanced-search-form" :form="form" @submit="handleSearch">
+      <a-row :gutter="24">
+        <a-col
+          v-for="i in columns.length-1"
+          :key="i"
+          :span="8"
+          :style="{ display: 'block'}"
+        >
+          <a-form-item :label="`${columns[i-1]['title']}`">
+            <a-input
+              v-decorator="[
+                `${columns[i-1]['dataIndex']}`,
+                {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Input something!',
+                    },
+                  ],
+                },
+              ]"
+              placeholder=""
+            />
+          </a-form-item>
+        </a-col>
+        <a-col
+          :key="8"
+          :span="8"
+          :style="{ display: 'block' }"
+        >
+          <a-form-item v-bind="formItemLayout" label="发送日期">
+            <a-date-picker
+              v-decorator="[
+                columns[7]['dataIndex'],
+                {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Input something!',
+                    },
+                  ],
+                },
+              ]" />
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col :span="24" :style="{ textAlign: 'right' }">
+          <a-button type="primary" html-type="submit">
+            submit
+          </a-button>
+          <a-button :style="{ marginLeft: '8px' }" @click="handleReset">
+            Clear
+          </a-button>
+          <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="toggle">
+            Collapse <a-icon :type="expand ? 'up' : 'down'" />
+          </a>
+        </a-col>
+      </a-row>
+    </a-form>
+    <br/>
+    <div>文件上传:</div>
+    <a-upload-dragger
+      name="file"
+      :multiple="true"
+      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+    >
+      <p class="ant-upload-drag-icon">
+        <a-icon type="inbox" />
+      </p>
+      <p class="ant-upload-text">Click or drag file to this area to upload</p>
+      <p class="ant-upload-hint">
+        Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+        band files
+      </p>
+    </a-upload-dragger>
   </div>
 </template>
-
 <script>
+import axios from 'axios'
+const columns = [
+  {
+    'title': '工资id',
+    'dataIndex': 'salary_id'
+  },
+  {
+    'title': '税后工资',
+    'dataIndex': 'after_tax'
+  },
+  {
+    'title': '奖金浮动',
+    'dataIndex': 'bonus_float'
+  },
+  {
+    'title': '考核浮动',
+    'dataIndex': 'check_float'
+  },
+  {
+    'title': '缴纳税务',
+    'dataIndex': 'individual_income_tax'
+  },
+  {
+    'title': '餐补',
+    'dataIndex': 'meal_subsidy'
+  },
+  {
+    'title': '员工id',
+    'dataIndex': 'staff_id'
+  },
+  {
+    'title': '发送日期',
+    'dataIndex': 'salary_date'
+  }
+]
 export default {
-  name: 'TestWork',
   data () {
     return {
-      visible: false,
-      visible2: false
+      expand: false,
+      form: this.$form.createForm(this, { name: 'advanced_search' }),
+      columns
     }
   },
-  created () {
-    this.form = this.$form.createForm(this)
-    this.form2 = this.$form.createForm(this)
+  computed: {
+    count () {
+      return this.expand ? 11 : 7
+    }
   },
   methods: {
-    handleCloseCurrentTab () {
-      this.$multiTab.closeCurrentPage() // or this.$multiTab.close()
-    },
-    handleOpenTab () {
-      this.$multiTab.open('/features/task')
-    },
-
-    handleOpenLoading () {
-      this.$nextTick(function () {
-        console.log('this', this)
-        console.log('this.$refs.tInput', this.$refs.tInput)
-      })
-      this.$loading.show()
-      setTimeout(() => {
-        this.$loading.hide()
-      }, 5000)
-    },
-    handleOpenLoadingCustomTip () {
-      this.$loading.show({ tip: '自定义提示语' })
-      setTimeout(() => {
-        this.$loading.hide()
-      }, 5000)
-    },
-
-    // confirm
-    confirm (e) {
-      e.stopPropagation()
-      const { path } = this.$route
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          this.$multiTab.rename(path, values.tabName)
-          this.visible = false
+    handleSearch (e) {
+      e.preventDefault()
+      this.form.validateFields((error, values) => {
+        console.log('error', error)
+        if (error) {
+          console.log(error)
+        } else {
+          console.log('Received values of form: ', values)
+          console.log(values.salary_date._d.getFullYear())
+          const d = values.salary_date._d
+          let resD = d.getFullYear() + '-'
+          if (d.getMonth() < 10) {
+            resD += '0'
+          }
+          resD += (d.getMonth() + 1) + '-'
+          if (d.getDate() < 10) {
+            resD += '0'
+          }
+          resD += d.getDate()
+          console.log(resD)
+          values.salary_date = resD
+          axios.post('/api/admin/insert', {
+            params: {
+              'data': values
+            }
+          }).then(result => {
+            this.$notification.open({
+              message: '通知：',
+              description:
+                '    添加成功！',
+              icon: <a-icon type="smile" style="color: #108ee9" />
+            })
+          })
         }
       })
     },
-    cancel () {
-      this.visible = false
+
+    handleReset () {
+      this.form.resetFields()
     },
-    confirm2 (e) {
-      e.stopPropagation()
-      this.form2.validateFields((err, values) => {
-        if (!err) {
-          this.$multiTab.rename(values.tabKey, values.tabName)
-          this.visible2 = false
-        }
-      })
+
+    toggle () {
+      this.expand = !this.expand
     }
   }
 }
 </script>
+<style>
+.ant-advanced-search-form {
+  padding: 24px;
+  background: #fbfbfb;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+}
 
-<style scoped>
+.ant-advanced-search-form .ant-form-item {
+  display: flex;
+}
 
+.ant-advanced-search-form .ant-form-item-control-wrapper {
+  flex: 1;
+}
+
+#components-form-demo-advanced-search .ant-form {
+  max-width: none;
+}
+#components-form-demo-advanced-search .search-result-list {
+  margin-top: 16px;
+  border: 1px dashed #e9e9e9;
+  border-radius: 6px;
+  background-color: #fafafa;
+  min-height: 200px;
+  text-align: center;
+  padding-top: 80px;
+}
 </style>

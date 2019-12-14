@@ -1,62 +1,94 @@
 <template>
-  <a-card :bordered="false">
-    <a-steps class="steps" :current="currentTab">
-      <a-step title="填写转账信息" />
-      <a-step title="确认转账信息" />
-      <a-step title="完成" />
-    </a-steps>
-    <div class="content">
-      <step1 v-if="currentTab === 0" @nextStep="nextStep"/>
-      <step2 v-if="currentTab === 1" @nextStep="nextStep" @prevStep="prevStep"/>
-      <step3 v-if="currentTab === 2" @prevStep="prevStep" @finish="finish"/>
-    </div>
-  </a-card>
+  <page-view :title="true">
+    <a-table
+      :columns="columns"
+      :dataSource="salaryList"
+      :pagination="pagination"
+      :loading="loading"
+      bordered
+    >
+      <template slot="name" slot-scope="text">
+        <a href="javascript:;">{{ text }}</a>
+      </template>
+    </a-table>
+  </page-view>
 </template>
-
 <script>
-import Step1 from './Step1'
-import Step2 from './Step2'
-import Step3 from './Step3'
+import axios from 'axios'
+import { PageView } from '@/layouts'
+const columns = [
+  {
+    title: '工资id',
+    dataIndex: 'salary_id',
+    sorter: (a, b) => a.salary_id > b.salary_id,
+    width: '20%',
+    scopedSlots: { customRender: 'salary_id' }
+  },
+  {
+    title: '税后工资',
+    sorter: (a, b) => a.after_tax - b.after_tax,
+    width: '13%',
+    dataIndex: 'after_tax'
+  },
+  {
+    title: '奖金浮动',
+    sorter: (a, b) => a.bonus_float - b.bonus_float,
+    width: '13%',
+    dataIndex: 'bonus_float'
+  },
+  {
+    title: '考核浮动',
+    sorter: (a, b) => a.check_float - b.check_float,
+    width: '13%',
+    dataIndex: 'check_float'
+  },
+  {
+    title: '缴纳税务',
+    sorter: (a, b) => a.individual_income_tax - b.individual_income_tax,
+    width: '13%',
+    dataIndex: 'individual_income_tax'
+  },
+  {
+    title: '餐补',
+    sorter: (a, b) => a.meal_subsidy - b.meal_subsidy,
+    width: '13%',
+    dataIndex: 'meal_subsidy'
+  },
+  {
+    title: '发送日期',
+    sorter: (a, b) => a.salary_date > b.salary_date,
+    width: '13%',
+    dataIndex: 'salary_date'
+  }
+]
 
 export default {
-  name: 'StepForm',
   components: {
-    Step1,
-    Step2,
-    Step3
+    PageView
   },
   data () {
     return {
-      description: '将一个冗长或用户不熟悉的表单任务分成多个步骤，指导用户完成。',
-      currentTab: 0,
-
-      // form
-      form: null
+      salaryList: [],
+      pagination: {},
+      loading: false,
+      columns
     }
   },
+  mounted () {
+    this.getData()
+  },
   methods: {
-
-    // handler
-    nextStep () {
-      if (this.currentTab < 2) {
-        this.currentTab += 1
-      }
-    },
-    prevStep () {
-      if (this.currentTab > 0) {
-        this.currentTab -= 1
-      }
-    },
-    finish () {
-      this.currentTab = 0
+    getData () {
+      console.log(this.$store.getters.userInfo.roleId)
+      axios.post('/api/user/salary', {
+        params: {
+          'username': this.$store.getters.userInfo.roleId
+        }
+      }).then(result => {
+        console.log(result.data.data)
+        this.salaryList = result.data.data
+      })
     }
   }
 }
 </script>
-
-<style lang="less" scoped>
-  .steps {
-    max-width: 750px;
-    margin: 16px auto;
-  }
-</style>

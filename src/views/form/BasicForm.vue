@@ -1,138 +1,174 @@
 <template>
-  <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
-    <a-form @submit="handleSubmit" :form="form">
-      <a-form-item
-        label="标题"
-        :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-        :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
-        <a-input
-          v-decorator="[
-            'name',
-            {rules: [{ required: true, message: '请输入标题' }]}
-          ]"
-          name="name"
-          placeholder="给目标起个名字" />
-      </a-form-item>
-      <a-form-item
-        label="起止日期"
-        :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-        :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
-        <a-range-picker
-          name="buildTime"
-          style="width: 100%"
-          v-decorator="[
-            'buildTime',
-            {rules: [{ required: true, message: '请选择起止日期' }]}
-          ]" />
-      </a-form-item>
-      <a-form-item
-        label="目标描述"
-        :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-        :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
-        <a-textarea
-          rows="4"
-          placeholder="请输入你阶段性工作目标"
-          v-decorator="[
-            'description',
-            {rules: [{ required: true, message: '请输入目标描述' }]}
-          ]" />
-      </a-form-item>
-      <a-form-item
-        label="衡量标准"
-        :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-        :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
-        <a-textarea
-          rows="4"
-          placeholder="请输入衡量标准"
-          v-decorator="[
-            'type',
-            {rules: [{ required: true, message: '请输入衡量标准' }]}
-          ]" />
-      </a-form-item>
-      <a-form-item
-        label="客户"
-        :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-        :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
-        <a-input
-          placeholder="请描述你服务的客户，内部客户直接 @姓名／工号"
-          v-decorator="[
-            'customer',
-            {rules: [{ required: true, message: '请描述你服务的客户' }]}
-          ]" />
-      </a-form-item>
-      <a-form-item
-        label="邀评人"
-        :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-        :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
-        :required="false"
-      >
-        <a-input placeholder="请直接 @姓名／工号，最多可邀请 5 人" />
-      </a-form-item>
-      <a-form-item
-        label="权重"
-        :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-        :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
-        :required="false"
-      >
-        <a-input-number :min="0" :max="100" />
-        <span> %</span>
-      </a-form-item>
-      <a-form-item
-        label="目标公开"
-        :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-        :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
-        :required="false"
-        help="客户、邀评人默认被分享"
-      >
-        <a-radio-group v-model="value">
-          <a-radio :value="1">公开</a-radio>
-          <a-radio :value="2">部分公开</a-radio>
-          <a-radio :value="3">不公开</a-radio>
-        </a-radio-group>
-        <a-form-item>
-          <a-select mode="multiple" v-if="value === 2">
-            <a-select-option value="4">同事一</a-select-option>
-            <a-select-option value="5">同事二</a-select-option>
-            <a-select-option value="6">同事三</a-select-option>
-          </a-select>
-        </a-form-item>
-      </a-form-item>
-      <a-form-item
-        :wrapperCol="{ span: 24 }"
-        style="text-align: center"
-      >
-        <a-button htmlType="submit" type="primary">提交</a-button>
-        <a-button style="margin-left: 8px">保存</a-button>
-      </a-form-item>
-    </a-form>
-  </a-card>
+  <page-view :avatar="avatar" :title="true">
+    <div slot="headerContent">
+      <div class="title">{{ timeFix }}，{{ user.name }}<span class="welcome-text">，{{ welcome }}</span></div>
+      <div>前端工程师 | 某某金服 - 某某某事业群 - VUE平台</div>
+    </div>
+  </page-view>
 </template>
 
 <script>
+import { timeFix } from '@/utils/util'
+import { mapState } from 'vuex'
+
+import { PageView } from '@/layouts'
+
+import { Radar } from '@/components'
+
+// import { getRoleList, getServiceList } from '@/api/manage'
+
 export default {
-  name: 'BaseForm',
+  name: 'Workplace',
+  components: {
+    PageView,
+    Radar
+  },
   data () {
     return {
-      description: '表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。',
-      value: 1,
+      timeFix: timeFix(),
+      avatar: '',
+      user: {},
 
-      // form
-      form: this.$form.createForm(this)
+      loading: true,
 
+      // data
+      scale: [{
+        dataKey: 'score',
+        min: 0,
+        max: 80
+      }]
     }
   },
-  methods: {
-
-    // handler
-    handleSubmit (e) {
-      e.preventDefault()
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          // eslint-disable-next-line no-console
-          console.log('Received values of form: ', values)
-        }
-      })
+  computed: {
+    ...mapState({
+      nickname: (state) => state.user.nickname,
+      welcome: (state) => state.user.welcome
+    }),
+    userInfo () {
+      return this.$store.getters.userInfo
     }
+  },
+  created () {
+    this.user = this.userInfo
+    this.avatar = this.userInfo.avatar
+  },
+  mounted () {
+  },
+  methods: {
   }
 }
 </script>
+
+<style lang="less" scoped>
+  .project-list {
+
+    .card-title {
+      font-size: 0;
+
+      a {
+        color: rgba(0, 0, 0, 0.85);
+        margin-left: 12px;
+        line-height: 24px;
+        height: 24px;
+        display: inline-block;
+        vertical-align: top;
+        font-size: 14px;
+
+        &:hover {
+          color: #1890ff;
+        }
+      }
+    }
+    .card-description {
+      color: rgba(0, 0, 0, 0.45);
+      height: 44px;
+      line-height: 22px;
+      overflow: hidden;
+    }
+    .project-item {
+      display: flex;
+      margin-top: 8px;
+      overflow: hidden;
+      font-size: 12px;
+      height: 20px;
+      line-height: 20px;
+      a {
+        color: rgba(0, 0, 0, 0.45);
+        display: inline-block;
+        flex: 1 1 0;
+
+        &:hover {
+          color: #1890ff;
+        }
+      }
+      .datetime {
+        color: rgba(0, 0, 0, 0.25);
+        flex: 0 0 auto;
+        float: right;
+      }
+    }
+    .ant-card-meta-description {
+      color: rgba(0, 0, 0, 0.45);
+      height: 44px;
+      line-height: 22px;
+      overflow: hidden;
+    }
+  }
+
+  .item-group {
+    padding: 20px 0 8px 24px;
+    font-size: 0;
+    a {
+      color: rgba(0, 0, 0, 0.65);
+      display: inline-block;
+      font-size: 14px;
+      margin-bottom: 13px;
+      width: 25%;
+    }
+  }
+
+  .members {
+    a {
+      display: block;
+      margin: 12px 0;
+      line-height: 24px;
+      height: 24px;
+      .member {
+        font-size: 14px;
+        color: rgba(0, 0, 0, .65);
+        line-height: 24px;
+        max-width: 100px;
+        vertical-align: top;
+        margin-left: 12px;
+        transition: all 0.3s;
+        display: inline-block;
+      }
+      &:hover {
+        span {
+          color: #1890ff;
+        }
+      }
+    }
+  }
+
+  .mobile {
+
+    .project-list {
+
+      .project-card-grid {
+        width: 100%;
+      }
+    }
+
+    .more-info {
+      border: 0;
+      padding-top: 16px;
+      margin: 16px 0 16px;
+    }
+
+    .headerContent .title .welcome-text {
+      display: none;
+    }
+  }
+
+</style>
