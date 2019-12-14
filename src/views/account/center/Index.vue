@@ -8,19 +8,19 @@
               <img :src="avatar()">
             </div>
             <div class="username">{{ nickname() }}</div>
-            <div class="bio">海纳百川，有容乃大</div>
+            <div class="bio">软件实验A++++队</div>
           </div>
           <div class="account-center-detail">
             <p>
-              <i class="title"></i>交互专家
+              <i class="title"></i>本科生
             </p>
             <p>
-              <i class="group"></i>蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED
+              <i class="group"></i>计算机科学与技术－计科实1701－软件实验A++++队
             </p>
             <p>
               <i class="address"></i>
-              <span>浙江省</span>
-              <span>杭州市</span>
+              <span>河北省</span>
+              <span>保定市</span>
             </p>
           </div>
           <a-divider/>
@@ -62,7 +62,7 @@
           <a-divider :dashed="true"/>
 
           <div class="account-center-team">
-            <div class="teamTitle">团队</div>
+            <div class="teamTitle">读书小组</div>
             <a-spin :spinning="teamSpinning">
               <div class="members">
                 <a-row>
@@ -111,7 +111,7 @@ export default {
   },
   data () {
     return {
-      tags: ['很有想法的', '专注设计', '辣~', '大长腿', '川妹子', '海纳百川'],
+      tags: ['很有想法的', '专注设计', '热爱软工', '海纳百川'],
 
       tagInputVisible: false,
       tagInputValue: '',
@@ -122,15 +122,15 @@ export default {
       tabListNoTitle: [
         {
           key: 'article',
-          tab: '文章(8)'
+          tab: '借书详情'
         },
         {
           key: 'app',
-          tab: '应用(8)'
+          tab: '消息通知'
         },
         {
           key: 'project',
-          tab: '项目(8)'
+          tab: '荐书详情'
         }
       ],
       noTitleKey: 'app'
@@ -143,10 +143,25 @@ export default {
     ...mapGetters(['nickname', 'avatar']),
 
     getTeams () {
-      this.$http.get('/workplace/teams').then(res => {
-        this.teams = res.result
-        this.teamSpinning = false
-      })
+      
+      this.teams = [
+        {
+          id: 1,
+          name: 'yjy',
+          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/gaOngJwsRYRaVAuXXcmB.png'
+        },
+        {
+          id: 1,
+          name: 'th',
+          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ubnKSIfAJTxIgXOKlciN.png'
+        },
+        {
+          id: 1,
+          name: 'cc',
+          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/WhxKECPNujWoWEFNdnJE.png'
+        }
+        ];
+      this.teamSpinning = false
     },
 
     handleTabChange (key, type) {

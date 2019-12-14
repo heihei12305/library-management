@@ -25,12 +25,6 @@ export const asyncRouterMap = [
             name: 'welcome',
             component: () => import('@/views/form/BasicForm'),
             meta: { title: '欢迎页', keepAlive: true, permission: [ 'form' ] }
-          },
-          {
-            path: '/index/salary',
-            name: 'salary',
-            component: () => import('@/views/form/stepForm/StepForm'),
-            meta: { title: '学生详情页', keepAlive: true, permission: [ 'form' ] }
           }
         ]
       },
@@ -148,6 +142,74 @@ export const asyncRouterMap = [
           }
         ]
       },
+       // account
+       {
+        path: '/account',
+        component: RouteView,
+        redirect: '/account/center',
+        name: 'account',
+        meta: { title: '个人页', icon: 'user', keepAlive: true, permission: [ 'user' ] },
+        children: [
+          {
+            path: '/account/center',
+            name: 'center',
+            component: () => import('@/views/account/center/Index'),
+            meta: { title: '个人中心', keepAlive: true, permission: [ 'user' ] }
+          },
+          {
+            path: '/account/settings',
+            name: 'settings',
+            component: () => import('@/views/account/settings/Index'),
+            meta: { title: '个人设置', hideHeader: true, permission: [ 'user' ] },
+            redirect: '/account/settings/base',
+            hideChildrenInMenu: true,
+            children: [
+              {
+                path: '/account/settings/base',
+                name: 'BaseSettings',
+                component: () => import('@/views/account/settings/BaseSetting'),
+                meta: { title: '基本设置', permission: [ 'user' ] }
+              },
+              {
+                path: '/account/settings/security',
+                name: 'SecuritySettings',
+                component: () => import('@/views/account/settings/Security'),
+                meta: { title: '安全设置', keepAlive: true, permission: [ 'user' ] }
+              },
+              {
+                path: '/account/settings/custom',
+                name: 'CustomSettings',
+                component: () => import('@/views/account/settings/Custom'),
+                meta: { title: '个性化设置', keepAlive: true, permission: [ 'user' ] }
+              },
+              {
+                path: '/account/settings/binding',
+                name: 'BindingSettings',
+                component: () => import('@/views/account/settings/Binding'),
+                meta: { title: '账户绑定', keepAlive: true, permission: [ 'user' ] }
+              },
+              {
+                path: '/account/settings/notification',
+                name: 'NotificationSettings',
+                component: () => import('@/views/account/settings/Notification'),
+                meta: { title: '新消息通知', keepAlive: true, permission: [ 'user' ] }
+              }
+            ]
+          },
+          {
+            path: '/account/recommend',
+            name: 'recommend',
+            component: () => import('@/views/account/recommend'),
+            meta: { title: '个人荐读', keepAlive: true, permission: [ 'user' ] }
+          },
+          {
+            path: '/account/find',
+            name: 'find',
+            component: () => import('@/views/account/find'),
+            meta: { title: '书籍查询', keepAlive: true, permission: [ 'user' ] }
+          }
+        ]
+      },
     ]
   },
   {
@@ -180,6 +242,11 @@ export const constantRouterMap = [
         path: 'register-result',
         name: 'registerResult',
         component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
+      },
+      {
+        path: 'recommend-result',
+        name: 'recommendResult',
+        component: () => import(/* webpackChunkName: "user" */ '@/views/account/recommendResult')
       },
       {
         path: 'recover',

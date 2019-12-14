@@ -33,8 +33,8 @@ export default {
   },
   computed: {
     email () {
-      const v = this.form && this.form.studentNumber || 'xxx'
-      const title = `你的账户：${v} 注册成功`
+      const v = this.form && this.form.bookname || 'xxx'
+      const title = `你推荐的：${v} 上传成功`
       return title
     }
   },
