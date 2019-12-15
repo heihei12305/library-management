@@ -66,24 +66,17 @@ export const asyncRouterMap = [
         meta: { title: '图书采购', icon: 'table', permission: [ 'table' ] },
         children: [
           {
-            path: '/list/table-list/:pageNo([1-9]\\d*)?',
+            path: '/list/table-list',
             name: 'TableListWrapper',
-            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/list/TableList'),
-            meta: { title: '查询表格', keepAlive: true, permission: [ 'table' ] }
+            meta: { title: '学生荐书审核', keepAlive: true, permission: [ 'table' ] }
           },
 
           {
-            path: '/list/basic-list',
-            name: 'BasicList',
+            path: '/list/standard-list',
+            name: 'StandardList',
             component: () => import('@/views/list/StandardList'),
-            meta: { title: '标准列表', keepAlive: true, permission: [ 'table' ] }
-          },
-          {
-            path: '/list/card',
-            name: 'CardList',
-            component: () => import('@/views/list/CardList'),
-            meta: { title: '卡片列表', keepAlive: true, permission: [ 'table' ] }
+            meta: { title: '新书采购', keepAlive: true, permission: [ 'table' ] }
           }
         ]
       },

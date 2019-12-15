@@ -28,5 +28,59 @@
     <script type="text/javascript" src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
     <% } %>
     <!-- built files will be auto injected -->
+    <style>
+      .text-popup {
+          animation: textPopup 1s;
+          color: red;
+          user-select: none;
+          white-space: nowrap;
+          position: absolute;
+          z-index: 99;
+      }
+      @keyframes textPopup {
+          0%, 100% {
+              opacity: 0;
+          }
+          5% {
+              opacity: 1;
+          }
+          100% {
+              transform: translateY(-50px);    
+          }
+      }
+    </style>
+    <script>
+      var fnTextPopup = function (arr, options) {
+          // arr参数是必须的
+          if (!arr || !arr.length) {
+              return;    
+          }
+          // 主逻辑
+          var index = 0;
+          document.documentElement.addEventListener('click', function (event) {
+              var x = event.pageX, y = event.pageY;
+              var eleText = document.createElement('span');
+              eleText.className = 'text-popup';
+              this.appendChild(eleText);
+              if (arr[index]) {
+                  eleText.innerHTML = arr[index];
+              } else {
+                  index = 0;
+                  eleText.innerHTML = arr[0];
+              }
+              // 动画结束后删除自己
+              eleText.addEventListener('animationend', function () {
+                  eleText.parentNode.removeChild(eleText);
+              });
+              // 位置
+              eleText.style.left = (x - eleText.clientWidth / 2) + 'px';
+              eleText.style.top = (y - eleText.clientHeight) + 'px';
+              // index递增
+              index++;
+          });    
+      };
+      
+      fnTextPopup(['热爱软工', '软工给个优吧', '软工真有意思',  'gzyjydlccc']);
+    </script>
   </body>
 </html>

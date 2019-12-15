@@ -34,7 +34,7 @@
             <a-form-item label="采购日期">
               <a-date-picker
                 v-decorator="[
-                  columns[5]['dataIndex'],
+                  columns[7]['dataIndex'],
                   {
                     rules: [
                       {
@@ -101,6 +101,14 @@
     {
       'title': '出版社',
       'dataIndex': 'press'
+    },
+    {
+      'title': '详情链接',
+      'dataIndex': 'link'
+    },
+    {
+      'title': '描述',
+      'dataIndex': 'description'
     },
     {
       'title': '采购日期',

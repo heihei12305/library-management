@@ -4,7 +4,7 @@
         <editable-cell :text="text" @change="onCellChange(record.key, 'name', $event)" />
       </template>
        <template
-        v-for="col in ['studentNumber', 'email', 'password','mobile']"
+        v-for="col in [ 'email', 'password','mobile']"
         :slot="col"
         slot-scope="text, record"
       >
@@ -291,7 +291,9 @@ export default {
       const newData = [...this.data]
       const target = newData.filter(item => key === item.key)[0]
       if (target) {
+       try{
         Object.assign(target, this.cacheData.filter(item => key === item.key)[0])
+        }catch(err){}
         delete target.editable
         this.data = newData
       }

@@ -4,25 +4,21 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
-            <a-form-item label="规则编号">
+            <a-form-item label="学号">
               <a-input v-model="queryParam.id" placeholder=""/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
-            <a-form-item label="使用状态">
+            <a-form-item label="书籍状态">
               <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
                 <a-select-option value="0">全部</a-select-option>
                 <a-select-option value="1">借阅中</a-select-option>
-                <a-select-option value="2">已超期</a-select-option>
+                <a-select-option value="2">已还</a-select-option>
+                <a-select-option value="3">超期</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
           <template v-if="advanced">
-            <a-col :md="8" :sm="24">
-              <a-form-item label="学号">
-                <a-input-number v-model="queryParam.callNo" style="width: 100%"/>
-              </a-form-item>
-            </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="借阅日期">
                 <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="请输入更新日期"/>
@@ -43,21 +39,6 @@
       </a-form>
     </div>
 
-    <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="$refs.createModal.add()">新建</a-button>
-      <a-button type="dashed" @click="tableOption">{{ optionAlertShow && '关闭' || '开启' }} alert</a-button>
-      <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
-        <a-menu slot="overlay">
-          <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
-          <!-- lock | unlock -->
-          <a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>
-        </a-menu>
-        <a-button style="margin-left: 8px">
-          批量操作 <a-icon type="down" />
-        </a-button>
-      </a-dropdown>
-    </div>
-
     <s-table
       ref="table"
       size="default"
@@ -67,23 +48,61 @@
       :alert="options.alert"
       :rowSelection="options.rowSelection"
       showPagination="auto"
+      bordered
     >
+     
+      <template
+        v-for="col in ['studentNumber','studentName','status','updatedAt','loanTime']"
+        :slot="col"
+        slot-scope="text, record"
+        >
+        <div :key="col">
+          <a-input
+            v-if="record.editable"
+            style="margin: -5px 0"
+            :value="text"
+            @change="e => handleChange(e.target.value, record.key, col)"
+          />
+          <template
+            v-else
+            ><span
+              v-if="col==='status'"
+            ><a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
+            </span>
+            <span
+              v-else
+            >{{ text }}</span>
+          </template>
+       </div>
+    </template>
+     <template slot="name" slot-scope="text, record">
+          <editable-cell :text="text" @change="onCellChange(record.key, 'name', $event)" />
+      </template>
       <span slot="serial" slot-scope="text, record, index">
         {{ index + 1 }}
       </span>
-      <span slot="status" slot-scope="text">
-        <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
-      </span>
-      <span slot="description" slot-scope="text">
-        <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
-      </span>
-
       <span slot="action" slot-scope="text, record">
         <template>
-          <a @click="handleEdit(record)">配置</a>
-          <a-divider type="vertical" />
-          <a @click="handleSub(record)">订阅报警</a>
-        </template>
+        <!-- <div class="editable-row-operations"> -->
+          <span v-if="record.editable">
+            <a @click="() => save(record.key)" style="margin-right:8px">Save</a>
+            <a-popconfirm title="Sure to cancel?" @confirm="() => cancel(record.key)">
+              <a>Cancel</a>
+            </a-popconfirm>
+          </span>
+          <span v-else>
+            <a @click="() => edit(record.key)">Edit</a>
+          </span>
+        <!-- </div> -->
+        <a-popconfirm
+          style="margin:0 0 0 15px"
+          v-if="loadData.length"
+          title="Sure to delete?"
+          @confirm="() => onDelete(record.key)"
+        >
+          <a href="javascript:;">Delete</a>
+        </a-popconfirm>
+      </template>
       </span>
     </s-table>
     <create-form ref="createModal" @ok="handleOk" />
@@ -92,29 +111,24 @@
 </template>
 
 <script>
-import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 import StepByStepModal from './../list/modules/StepByStepModal'
 import CreateForm from './../list/modules/CreateForm'
-import { getRoleList, getServiceList } from '@/api/manage'
 import axios from 'axios'
+import EditableCell from './EditableCell'
 
 const statusMap = {
-  0: {
-    status: 'default',
-    text: '关闭'
-  },
   1: {
     status: 'processing',
-    text: '运行中'
+    text: '借阅中'
   },
   2: {
     status: 'success',
-    text: '已上线'
+    text: '已还'
   },
   3: {
     status: 'error',
-    text: '异常'
+    text: '超期'
   }
 }
 
@@ -124,7 +138,8 @@ export default {
     STable,
     Ellipsis,
     CreateForm,
-    StepByStepModal
+    StepByStepModal,
+    EditableCell
   },
   data () {
     return {
@@ -136,55 +151,104 @@ export default {
       // 表头
       columns: [
         {
-          title: '规则编号',
-          dataIndex: 'no'
+          title: '#',
+          scopedSlots: { customRender: 'serial' }
         },
         {
-          title: '描述',
-          dataIndex: 'description',
-          scopedSlots: { customRender: 'description' }
+          title: '学号',
+          dataIndex: 'studentNumber',
+          width: '15%',
+          scopedSlots: { customRender: 'studentNumber' },
+          sorter: (a, b) => a.studentNumber > b.studentNumber,
         },
         {
-          title: '服务调用次数',
-          dataIndex: 'callNo',
-          sorter: true,
-          needTotal: true,
-          customRender: (text) => text + ' 次'
+          title: '姓名',
+          dataIndex: 'studentName',
+          width: '15%',
+          scopedSlots: { customRender: 'studentName' }
+        },
+        {
+          title: '借阅日期',
+          dataIndex: 'loanTime',
+          width: '15%',
+          scopedSlots: { customRender: 'loanTime' },
+          sorter: (a, b) => a.studentNumber > b.studentNumber,
         },
         {
           title: '状态',
           dataIndex: 'status',
+          width: '15%',
           scopedSlots: { customRender: 'status' }
         },
         {
-          title: '更新时间',
+          title: '还书时间',
           dataIndex: 'updatedAt',
-          sorter: true
+          width: '15%',
+          scopedSlots: { customRender: 'updatedAt' },
+          sorter: (a, b) => a.updatedAt > b.updatedAt,
         },
         {
           title: '操作',
           dataIndex: 'action',
-          width: '150px',
+          width: '15%',
           scopedSlots: { customRender: 'action' }
         }
       ],
+      data:[],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        console.log('loadData.parameter', parameter)
-        // return getServiceList(Object.assign(parameter, this.queryParam))
-        //   .then(res => {
-        //     return res.result
-        //   })
-       let data = [{
-          'no':1,
-          'description':1,
-          'callNo':1,
-          'status':1,
-          'updatedAt':1,
-          'action':1
-        }];
-        return data
+        let res ;
+        return new Promise(resolve => {
+          axios.post('/api/admin/searchRecord', {
+            params: {
+              parameter: parameter,
+              queryParam:this.queryParam
+            }
+          }).then(result => {
+            res = result.data;
+            resolve(res);
+            this.$refs.table.refresh(true)
+          }).catch(err=>{
+            res = {
+              data:[
+              {
+                'no':1,
+                'studentNumber':1,
+                'studentName':1,
+                'status':1,
+                'updatedAt':1,
+                'action':1,
+                'loanTime':1,
+                'key':1,
+                'editable':false
+              },
+              {
+                'no':12,
+                'studentNumber':12,
+                'studentName':12,
+                'status':1,
+                'updatedAt':12,
+                'action':1,
+                'loanTime':12,
+                'key':12,
+                'editable':false
+              }
+              ],
+              pageNo:1,
+              pageSize:12,
+              totalCount:100,
+              totalPage:12,
+            }
+            resolve(res);
+            })
+        
+        }).then(res => {
+
+          this.data = res.data;
+          return res
+        })
       },
+      
       selectedRowKeys: [],
       selectedRows: [],
 
@@ -196,7 +260,7 @@ export default {
           onChange: this.onSelectChange
         }
       },
-      optionAlertShow: false
+      optionAlertShow: false  
     }
   },
   filters: {
@@ -209,9 +273,14 @@ export default {
   },
   created () {
     this.tableOption()
-    // getRoleList({ t: new Date() })
   },
+  mounted() {
+      this.init();
+   },
   methods: {
+    init() {
+      console.log('init',this.loadData)
+    },
     tableOption () {
       if (!this.optionAlertShow) {
         this.options = {
@@ -236,18 +305,6 @@ export default {
         this.optionAlertShow = false
       }
     },
-
-    handleEdit (record) {
-      console.log(record)
-      this.$refs.modal.edit(record)
-    },
-    handleSub (record) {
-      if (record.status !== 0) {
-        this.$message.info(`${record.no} 订阅成功`)
-      } else {
-        this.$message.error(`${record.no} 订阅失败，规则已关闭`)
-      }
-    },
     handleOk () {
       this.$refs.table.refresh()
     },
@@ -258,10 +315,81 @@ export default {
     toggleAdvanced () {
       this.advanced = !this.advanced
     },
-    resetSearchForm () {
-      this.queryParam = {
-        date: moment(new Date())
+    onDelete (key) {
+      let dataSource = [...this.data]
+      console.log(dataSource)
+      // this.loadData = dataSource.filter(item => item.key !== key)
+      const deleSource = dataSource.filter(item => item.key === key)
+      console.log(deleSource)
+      axios.post('/api/admin/deleteRecord', {
+        params: {
+          data: deleSource[0]
+        }
+      }).then(result => {
+        this.$message.success('删除成功！') 
+        this.$refs.table.refresh(true)
+      }).catch(err => {
+        this.$message.error('删除失败！') 
+        this.$refs.table.refresh(true)
+      })
+    },
+     onCellChange (key, dataIndex, value) {
+      const dataSource = [...this.data]
+      const target = dataSource.find(item => item.key === key)
+      if (target) {
+        target[dataIndex] = value
+        this.data = dataSource
       }
+    },
+     handleChange (value, key, column) {
+      const newData = [...this.data]
+      const target = newData.filter(item => key === item.key)[0]
+      if (target) {
+        target[column] = value
+        this.data = newData
+      }
+    },
+    edit (key) {
+      const newData = [...this.data]
+      const target = newData.filter(item => key === item.key)[0]
+      if (target) {
+        target.editable = true
+        this.data = newData
+      }
+    },
+    save (key) {
+      const newData = [...this.data]
+      const target = newData.filter(item => key === item.key)[0]
+      console.log(target)
+      axios.post('/api/admin/reviseRecord', {
+        params: {
+          data: target
+        }
+      }).then(result => {
+        this.$message.success('修改成功！') 
+        this.$refs.table.refresh(true)
+      }).catch(err => {
+        this.$message.error('修改失败！') 
+        this.$refs.table.refresh(true)
+      })
+      if (target) {
+        delete target.editable
+        this.data = newData
+        this.cacheData = newData.map(item => ({ ...item }))
+      }
+    },
+    cancel (key) {
+      this.$refs.table.refresh(true)
+      const newData = [...this.data]
+      const target = newData.filter(item => key === item.key)[0]
+      if (target) {
+        try{
+        Object.assign(target, this.cacheData.filter(item => key === item.key)[0])
+        }catch(err){}
+        delete target.editable
+        this.data = newData
+      }
+      
     }
   }
 }

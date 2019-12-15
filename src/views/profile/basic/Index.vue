@@ -81,6 +81,7 @@
   </template>
   <script>
   import axios from 'axios'
+  import md5 from 'md5'
   const columns = [
     {
       'title': '学号',
@@ -134,6 +135,7 @@
             resD += d.getDate()
             console.log(resD)
             values.add_date = resD
+            values.initPassword = md5(values.initPassword)
             axios.post('/api/admin/insertUser', {
               params: {
                 'data': values

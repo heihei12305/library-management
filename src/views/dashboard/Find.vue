@@ -4,7 +4,7 @@
         <editable-cell :text="text" @change="onCellChange(record.key, 'name', $event)" />
       </template>
        <template
-        v-for="col in ['ISBN', 'bookname', 'author','booknumber','press']"
+        v-for="col in ['bookname', 'author','booknumber','press']"
         :slot="col"
         slot-scope="text, record"
       >
@@ -238,9 +238,17 @@ export default {
             'bookname':1,
             'author':1,
             'booknumber':1,
-            'press':1
+            'press':1,
+        },
+         {
+            'ISBN':2,
+            'bookname':2,
+            'author':2,
+            'booknumber':2,
+            'press':12,
         }
       ]
+      this.data.forEach((item)=>item['key'] = item['ISBN'])
     },
     handleSearch (selectedKeys, confirm) {
       confirm()
@@ -293,7 +301,6 @@ export default {
     save (key) {
       const newData = [...this.data]
       const target = newData.filter(item => key === item.key)[0]
-      console.log(target)
       axios.post('/api/admin/reviseBook', {
         params: {
           data: target
@@ -311,7 +318,9 @@ export default {
       const newData = [...this.data]
       const target = newData.filter(item => key === item.key)[0]
       if (target) {
+        try{
         Object.assign(target, this.cacheData.filter(item => key === item.key)[0])
+        }catch(err){}
         delete target.editable
         this.data = newData
       }

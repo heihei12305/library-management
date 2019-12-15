@@ -49,6 +49,7 @@ import {
   notification,
   Carousel,
   Comment,
+  Statistic,
 } from 'ant-design-vue'
 // import VueCropper from 'vue-cropper'
 
@@ -93,6 +94,7 @@ Vue.use(Popconfirm)
 Vue.use(notification)
 Vue.use(Carousel)
 Vue.use(Comment)
+Vue.use(Statistic)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message
