@@ -38,28 +38,22 @@ export const asyncRouterMap = [
         meta: { title: '图书流通', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
         children: [
           {
-            path: '/dashboard/revise',
-            name: 'Analysis',
-            component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '学生信息添加', keepAlive: false, permission: [ 'dashboard' ] }
-          },
-          {
-            path: '/dashboard/delete',
-            name: 'Workplace',
-            component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: '学生信息修改', keepAlive: true, permission: [ 'dashboard' ] }
-          },
-          {
             path: '/dashboard/insert',
             name: 'TestWork',
-            component: () => import('@/views/dashboard/TestWork'),
+            component: () => import('@/views/dashboard/Insert'),
             meta: { title: '书籍信息添加', keepAlive: true, permission: [ 'dashboard' ] }
           },
           {
             path: '/dashboard/find',
             name: 'find',
-            component: () => import('@/views/dashboard/Monitor'),
+            component: () => import('@/views/dashboard/Find'),
             meta: { title: '书籍信息修改', keepAlive: true, permission: [ 'dashboard' ] }
+          },
+          {
+            path: '/dashboard/analysis',
+            name: 'analysis',
+            component: () => import('@/views/dashboard/Analysis'),
+            meta: { title: '学生借阅管理', keepAlive: true, permission: [ 'dashboard' ] }
           }
         ]
       },
@@ -90,33 +84,6 @@ export const asyncRouterMap = [
             name: 'CardList',
             component: () => import('@/views/list/CardList'),
             meta: { title: '卡片列表', keepAlive: true, permission: [ 'table' ] }
-          },
-          {
-            path: '/list/search',
-            name: 'SearchList',
-            component: () => import('@/views/list/search/SearchLayout'),
-            redirect: '/list/search/article',
-            meta: { title: '搜索列表', keepAlive: true, permission: [ 'table' ] },
-            children: [
-              {
-                path: '/list/search/article',
-                name: 'SearchArticles',
-                component: () => import('../views/list/search/Article'),
-                meta: { title: '搜索列表（文章）', permission: [ 'table' ] }
-              },
-              {
-                path: '/list/search/project',
-                name: 'SearchProjects',
-                component: () => import('../views/list/search/Projects'),
-                meta: { title: '搜索列表（项目）', permission: [ 'table' ] }
-              },
-              {
-                path: '/list/search/application',
-                name: 'SearchApplications',
-                component: () => import('../views/list/search/Applications'),
-                meta: { title: '搜索列表（应用）', permission: [ 'table' ] }
-              }
-            ]
           }
         ]
       },
@@ -132,13 +99,13 @@ export const asyncRouterMap = [
             path: '/profile/basic',
             name: 'ProfileBasic',
             component: () => import('@/views/profile/basic/Index'),
-            meta: { title: '基础详情页', permission: [ 'profile' ] }
+            meta: { title: '添加用户', permission: [ 'profile' ] }
           },
           {
             path: '/profile/advanced',
             name: 'ProfileAdvanced',
             component: () => import('@/views/profile/advanced/Advanced'),
-            meta: { title: '高级详情页', permission: [ 'profile' ] }
+            meta: { title: '修改用户', permission: [ 'profile' ] }
           }
         ]
       },
@@ -247,6 +214,11 @@ export const constantRouterMap = [
         path: 'recommend-result',
         name: 'recommendResult',
         component: () => import(/* webpackChunkName: "user" */ '@/views/account/recommendResult')
+      },
+      {
+        path: 'security-result',
+        name: 'SecurityResult',
+        component: () => import(/* webpackChunkName: "user" */ '@/views/account/settings/SecurityResult')
       },
       {
         path: 'recover',

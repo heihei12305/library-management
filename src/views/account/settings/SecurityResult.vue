@@ -15,8 +15,10 @@
 <script>
 import { Result } from '@/components'
 import axios from 'axios'
+import md5 from 'md5'
 
 export default {
+  name: 'SecurityResult',
   components: {
     Result
   },
@@ -27,12 +29,12 @@ export default {
     }
   },
   mounted () {
-    this.recommend()
+    this.register()
   },
   computed: {
     email () {
-      const v = this.form && this.form.bookname || 'xxx'
-      const title = `你推荐的：${v} 上传成功`
+      const v = this.form && this.form.studentNumber || 'xxx'
+      const title = `你的账户密码修改成功！`
       return title
     }
   },
@@ -40,19 +42,18 @@ export default {
     this.form = this.$route.params
   },
   methods: {
-    recommend () {
-      console.log(this.form)
-      axios.post('/api/user/recommend', {
+    register () {
+      console.log(1,this.form)
+      axios.post('/api/user/security', {
         params: {
-          'ISBN': this.form.ISBN,
-          'author': this.form.author,
-          'bookname': this.form.bookname,
-          'cause': this.form.cause,
-          'press': this.form.press
+          
         }
       }).then(result => {
         
       })
+    },
+    goHomeHandle () {
+      this.$router.push({ name: 'login' })
     }
   }
 }

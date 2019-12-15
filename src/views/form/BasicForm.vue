@@ -55,12 +55,9 @@
             <a-list>
               <a-list-item :key="index" v-for="(item, index) in activities">
                 <a-list-item-meta>
-                  <a-avatar slot="avatar" :src="item.user.avatar" />
+                  <a-avatar slot="avatar" :src="item.avatar" />
                   <div slot="title">
-                    <span>{{ item.user.nickname }}</span>&nbsp;
-                    在&nbsp;<a href="#">{{ item.project.name }}</a>&nbsp;
-                    <span>{{ item.project.action }}</span>&nbsp;
-                    <a href="#">{{ item.project.event }}</a>
+                    <span>{{ item.text }}</span>&nbsp;
                   </div>
                   <div slot="description">{{ item.time }}</div>
                 </a-list-item-meta>
@@ -133,41 +130,41 @@ const DataSet = require('@antv/data-set')
           },
           {
             id: 2,
-            cover: 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',
-            title: 'Angular',
-            description: '希望是一个好东西，也许是最好的，好东西是不会消亡的',
+            cover: 'https://img3.doubanio.com/view/subject/m/public/s29071620.jpg',
+            title: '有一个叫欧维的男人决定去死',
+            description: '天冷的时候，如何避免钥匙卡在锁孔里；哪块地板踩上去的时候容易弯曲；怎么打开一扇橱门又恰好可以不让它嘎吱作响。这些都是会赋予你归属感的小秘密。',
             status: 1,
             updatedAt: '2018-07-26 00:00:00'
           },
           {
             id: 3,
-            cover: 'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png',
-            title: 'Ant Design',
-            description: '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
+            cover: 'https://img9.doubanio.com/view/subject/l/public/s29350294.jpg',
+            title: '杀死一只知更鸟',
+            description: '他们永远永远也不可能理解：我之所以这样生活，是因为这就是我想要的生活方式。',
             status: 1,
             updatedAt: '2018-07-26 00:00:00'
           },
           {
             id: 4,
-            cover: 'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png',
-            title: 'Ant Design Pro',
-            description: '那时候我只会想自己想要什么，从不想自己拥有什么',
+            cover: 'https://img3.doubanio.com/view/subject/l/public/s28109182.jpg',
+            title: '无声告白',
+            description: '你永远得不到你想要的；你只是学会了如何得过且过而已。',
             status: 1,
             updatedAt: '2018-07-26 00:00:00'
           },
           {
             id: 5,
-            cover: 'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png',
-            title: 'Bootstrap',
-            description: '凛冬将至',
+            cover: 'https://dss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=1725258594,2840618272&fm=179&app=42&f=JPEG?w=121&h=140',
+            title: '人类简史-从动物到上帝',
+            description: '痛苦来自欲望；要从痛苦中解脱，就要放下欲望；而要放下欲望，就必须训练心智，体验事物的本质。',
             status: 1,
             updatedAt: '2018-07-26 00:00:00'
           },
           {
             id: 6,
-            cover: 'https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png',
-            title: 'Vue',
-            description: '生命就像一盒巧克力，结果往往出人意料',
+            cover: 'https://img1.doubanio.com/view/subject/l/public/s29810488.jpg',
+            title: '岛上书店',
+            description: '没有人是一座孤岛，一本书自成一个世界。',
             status: 1,
             updatedAt: '2018-07-26 00:00:00'
           }
@@ -176,80 +173,8 @@ const DataSet = require('@antv/data-set')
         radarLoading: false,
         activities: [{
             id: 1,
-            user: {
-              nickname: '@name',
-              avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
-            },
-            project: {
-              name: '白鹭酱油开发组',
-              action: '更新',
-              event: '番组计划'
-            },
-            time: '2018-08-23 14:47:00'
-          },
-          {
-            id: 1,
-            user: {
-              nickname: '蓝莓酱',
-              avatar: 'https://gw.alipayobjects.com/zos/rmsportal/jZUIxmJycoymBprLOUbT.png'
-            },
-            project: {
-              name: '白鹭酱油开发组',
-              action: '更新',
-              event: '番组计划'
-            },
-            time: '2018-08-23 09:35:37'
-          },
-          {
-            id: 1,
-            user: {
-              nickname: '@name',
-              avatar: '@image(64x64)'
-            },
-            project: {
-              name: '白鹭酱油开发组',
-              action: '创建',
-              event: '番组计划'
-            },
-            time: '2017-05-27 00:00:00'
-          },
-          {
-            id: 1,
-            user: {
-              nickname: '曲丽丽',
-              avatar: '@image(64x64)'
-            },
-            project: {
-              name: '高逼格设计天团',
-              action: '更新',
-              event: '六月迭代'
-            },
-            time: '2018-08-23 14:47:00'
-          },
-          {
-            id: 1,
-            user: {
-              nickname: '@name',
-              avatar: '@image(64x64)'
-            },
-            project: {
-              name: '高逼格设计天团',
-              action: 'created',
-              event: '六月迭代'
-            },
-            time: '2018-08-23 14:47:00'
-          },
-          {
-            id: 1,
-            user: {
-              nickname: '曲丽丽',
-              avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
-            },
-            project: {
-              name: '高逼格设计天团',
-              action: 'created',
-              event: '六月迭代'
-            },
+            avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+            text:'yjydlnb',
             time: '2018-08-23 14:47:00'
           }
           ],
@@ -308,40 +233,40 @@ const DataSet = require('@antv/data-set')
           max: 80
         }],
         radarData: [{
-          item: '引用',
-          '个人': 70,
-          '团队': 30,
-          '部门': 40
+          item: '哲学',
+          '借出': 70,
+          '还入': 30,
+          '采购': 40
         },
         {
-          item: '口碑',
-          '个人': 60,
-          '团队': 70,
-          '部门': 40
+          item: '文学',
+          '借出': 60,
+          '还入': 70,
+          '采购': 40
         },
         {
-          item: '产量',
-          '个人': 50,
-          '团队': 60,
-          '部门': 40
+          item: '科学',
+          '借出': 50,
+          '还入': 60,
+          '采购': 40
         },
         {
-          item: '贡献',
-          '个人': 40,
-          '团队': 50,
-          '部门': 40
+          item: '期刊',
+          '借出': 40,
+          '还入': 50,
+          '采购': 40
         },
         {
-          item: '热度',
-          '个人': 60,
-          '团队': 70,
-          '部门': 40
+          item: '工业',
+          '借出': 60,
+          '还入': 70,
+          '采购': 40
         },
         {
-          item: '引用',
-          '个人': 70,
-          '团队': 50,
-          '部门': 40
+          item: '综合',
+          '借出': 70,
+          '还入': 50,
+          '采购': 40
         }
         ]
       }
@@ -355,7 +280,7 @@ const DataSet = require('@antv/data-set')
         const dv = new DataSet.View().source(this.radarData)
         dv.transform({
           type: 'fold',
-          fields: ['个人', '团队', '部门'],
+          fields: ['借出', '还入', '采购'],
           key: 'user',
           value: 'score'
         })

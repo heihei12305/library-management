@@ -40,6 +40,14 @@
               '软工实验给个优吧！',
             datetime: moment().subtract(2, 'days'),
           },
+           {
+            actions: ['Reply to'],
+            author: '管理员',
+            avatar: 'https://heihei12305.github.io/images/avatar.png?v=1576318119511',
+            content:
+              '借的《人类简史-从动物到上帝》快到期啦！',
+            datetime: moment().subtract(3, 'days'),
+          },
         ],
         moment,
       };

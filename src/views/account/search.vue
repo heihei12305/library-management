@@ -139,10 +139,10 @@ const columns = [
     }
   },
   {
-    title: '存放位置',
+    title: '出版社',
     width: '20%',
-    dataIndex: 'location',
-    key: 'location',
+    dataIndex: 'press',
+    key: 'press',
     scopedSlots: {
       filterDropdown: 'filterDropdown',
       filterIcon: 'filterIcon',
@@ -172,18 +172,12 @@ export default {
   },
   methods: {
     getData () {
-      //axios.get('/api/user/book', {
-        //params: {}
-      //}).then(result => {
-       // this.data = result.data
-      //})
-      this.data = [{
-          'ISBN':1,
-          'bookname':1,
-          'author':1,
-          'booknumber':1,
-          'location':1
-      }]
+      axios.get('/api/user/book', {
+        params: {}
+      }).then(result => {
+          console.log(result.data.data)
+        this.data = result.data.data
+      })
     },
     handleSearch (selectedKeys, confirm) {
       confirm()

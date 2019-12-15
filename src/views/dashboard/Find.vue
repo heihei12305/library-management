@@ -4,7 +4,7 @@
         <editable-cell :text="text" @change="onCellChange(record.key, 'name', $event)" />
       </template>
        <template
-        v-for="col in ['studentNumber', 'email', 'password','mobile']"
+        v-for="col in ['ISBN', 'bookname', 'author','booknumber','press']"
         :slot="col"
         slot-scope="text, record"
       >
@@ -102,20 +102,20 @@
 
 <script>
 import axios from 'axios'
-import EditableCell from './../../dashboard/EditableCell'
+import EditableCell from './EditableCell'
 const columns = [
- {
-    title: '学号',
-    width: '19%',
-    dataIndex: 'studentNumber',
-    key: 'studentNumber',
-    sorter: (a, b) => a.studentNumber > b.studentNumber,
+  {
+    title: 'ISBN',
+    dataIndex: 'ISBN',
+    width: '13%',
+    key: 'ISBN',
+    sorter: (a, b) => a.ISBN > b.ISBN,
     scopedSlots: {
       filterDropdown: 'filterDropdown',
       filterIcon: 'filterIcon',
-      customRender: 'studentNumber'
+      customRender: 'ISBN'
     },
-    onFilter: (value, record) => record.studentNumber.toString().toLowerCase().includes(value.toLowerCase()),
+    onFilter: (value, record) => record.ISBN.toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: visible => {
       if (visible) {
         setTimeout(() => {
@@ -125,16 +125,16 @@ const columns = [
     }
   },
   {
-    title: '邮箱',
-    dataIndex: 'email',
-    width: '19%',
-    key: 'email',
+    title: '书名',
+    width: '13%',
+    dataIndex: 'bookname',
+    key: 'bookname',
     scopedSlots: {
       filterDropdown: 'filterDropdown',
       filterIcon: 'filterIcon',
-      customRender: 'email'
+      customRender: 'bookname'
     },
-    onFilter: (value, record) => record.email.toString().toLowerCase().includes(value.toLowerCase()),
+    onFilter: (value, record) => record.bookname.toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: visible => {
       if (visible) {
         setTimeout(() => {
@@ -144,16 +144,16 @@ const columns = [
     }
   },
   {
-    title: '密码',
-    width: '19%',
-    dataIndex: 'password',
-    key: 'password',
+    title: '作者',
+    width: '10%',
+    dataIndex: 'author',
+    key: 'author',
     scopedSlots: {
       filterDropdown: 'filterDropdown',
       filterIcon: 'filterIcon',
-      customRender: 'password'
+      customRender: 'author'
     },
-    onFilter: (value, record) => record.password.toString().toLowerCase().includes(value.toLowerCase()),
+    onFilter: (value, record) => record.author.toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: visible => {
       if (visible) {
         setTimeout(() => {
@@ -163,17 +163,36 @@ const columns = [
     }
   },
   {
-    title: '手机号',
-    width: '19%',
-    dataIndex: 'mobile',
-    key: 'mobile',
-    sorter: (a, b) => a.mobile > b.mobile,
+    title: '可借数量',
+    width: '13%',
+    dataIndex: 'booknumber',
+    key: 'booknumber',
+    sorter: (a, b) => a.booknumber > b.booknumber,
     scopedSlots: {
       filterDropdown: 'filterDropdown',
       filterIcon: 'filterIcon',
-      customRender: 'mobile'
+      customRender: 'booknumber'
     },
-    onFilter: (value, record) => record.mobile.toString().toLowerCase().includes(value.toLowerCase()),
+    onFilter: (value, record) => record.booknumber.toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: visible => {
+      if (visible) {
+        setTimeout(() => {
+          this.searchInput.focus()
+        }, 0)
+      }
+    }
+  },
+  {
+    title: '出版社',
+    width: '20%',
+    dataIndex: 'press',
+    key: 'press',
+    scopedSlots: {
+      filterDropdown: 'filterDropdown',
+      filterIcon: 'filterIcon',
+      customRender: 'press'
+    },
+    onFilter: (value, record) => record.location.toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: visible => {
       if (visible) {
         setTimeout(() => {
@@ -215,10 +234,11 @@ export default {
       //})
       this.data = [
         {
-            'studentNumber':1,
-            'email':1,
-            'password':1,
-            'mobile':1
+            'ISBN':1,
+            'bookname':1,
+            'author':1,
+            'booknumber':1,
+            'press':1
         }
       ]
     },
@@ -246,7 +266,7 @@ export default {
       this.data = dataSource.filter(item => item.key !== key)
       const deleSource = dataSource.filter(item => item.key === key)
       console.log(deleSource)
-      axios.post('/api/admin/deleteUser', {
+      axios.post('/api/admin/deleteBook', {
         params: {
           data: deleSource[0]
         }
@@ -274,7 +294,7 @@ export default {
       const newData = [...this.data]
       const target = newData.filter(item => key === item.key)[0]
       console.log(target)
-      axios.post('/api/admin/reviseUser', {
+      axios.post('/api/admin/reviseBook', {
         params: {
           data: target
         }

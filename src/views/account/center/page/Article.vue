@@ -32,6 +32,7 @@
 import { PageView } from '@/layouts'
 import { STable } from '@/components'
 import DetailList from '@/components/tools/DetailList'
+import axios from 'axios'
 const DetailListItem = DetailList.Item
 
 export default {
@@ -75,6 +76,13 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadGoodsData: () => {
         return new Promise(resolve => {
+          console.log(1,this.$store.getters.userInfo)
+          // axios.get('/api/user/getOperation1', {
+          //     params: {}
+          //   }).then(result => {
+          //     this.operation1 = result.data;
+          //     resolve(result.data);
+          //   })
           resolve({
             data: [
               {

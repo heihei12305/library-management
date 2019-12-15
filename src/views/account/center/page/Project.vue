@@ -31,8 +31,6 @@
         </a-step>
         <a-step title="部门初审">
         </a-step>
-        <a-step title="财务复核">
-        </a-step>
         <a-step title="完成">
         </a-step>
       </a-steps>
@@ -93,15 +91,14 @@
 
 <script>
 import { mixinDevice } from '@/utils/mixin'
-import { PageView } from '@/layouts'
 import DetailList from '@/components/tools/DetailList'
+import axios from 'axios'
 
 const DetailListItem = DetailList.Item
 
 export default {
   name: 'Advanced',
   components: {
-    PageView,
     DetailList,
     DetailListItem
   },
@@ -154,14 +151,6 @@ export default {
           remark: '-'
         },
         {
-          key: 'op2',
-          type: '财务复审',
-          name: '付小小',
-          status: 'reject',
-          updatedAt: '2019-10-03  19:23:12',
-          remark: '不通过原因'
-        },
-        {
           key: 'op3',
           type: '部门初审',
           name: '周毛毛',
@@ -188,10 +177,27 @@ export default {
       ]
     }
   },
+  mounted () {
+    this.getOperation1()
+  },
+  methods: {
+    getOperation1() {
+       console.log(2,this.$store.getters.userInfo.creatorId)
+       axios.get('/api/user/getOperation1', {
+         params: {
+           'son':this.$store.getters.userInfo.creatorId
+         }
+      }).then(result => {
+        console.log(result.data)
+        this.operation1 = result.data;
+      })
+    }
+  },
   filters: {
     statusFilter (status) {
       const statusMap = {
         'agree': '成功',
+        'judging': '审核中',
         'reject': '驳回'
       }
       return statusMap[status]
@@ -199,6 +205,7 @@ export default {
     statusTypeFilter (type) {
       const statusTypeMap = {
         'agree': 'success',
+        'judging': 'warning',
         'reject': 'error'
       }
       return statusTypeMap[type]

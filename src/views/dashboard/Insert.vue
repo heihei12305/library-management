@@ -31,10 +31,10 @@
             :span="8"
             :style="{ display: 'block' }"
           >
-            <a-form-item label="添加日期">
+            <a-form-item label="采购日期">
               <a-date-picker
                 v-decorator="[
-                  columns[3]['dataIndex'],
+                  columns[5]['dataIndex'],
                   {
                     rules: [
                       {
@@ -83,20 +83,28 @@
   import axios from 'axios'
   const columns = [
     {
-      'title': '学号',
-      'dataIndex': 'studentNumber'
+      'title': 'ISBN',
+      'dataIndex': 'ISBN'
     },
     {
-      'title': '初始密码',
-      'dataIndex': 'initPassword'
+      'title': '书名',
+      'dataIndex': 'bookname'
     },
     {
-      'title': '管理员名称',
-      'dataIndex': 'adminName'
+      'title': '作者',
+      'dataIndex': 'author'
     },
     {
-      'title': '添加日期',
-      'dataIndex': 'add_date'
+      'title': '可借数量',
+      'dataIndex': 'booknumber'
+    },
+    {
+      'title': '出版社',
+      'dataIndex': 'press'
+    },
+    {
+      'title': '采购日期',
+      'dataIndex': 'purchase_date'
     }
   ]
   export default {
@@ -121,8 +129,8 @@
             console.log(error)
           } else {
             console.log('Received values of form: ', values)
-            console.log(values.add_date._d.getFullYear())
-            const d = values.add_date._d
+            console.log(values.purchase_date._d.getFullYear())
+            const d = values.purchase_date._d
             let resD = d.getFullYear() + '-'
             if (d.getMonth() < 10) {
               resD += '0'
@@ -133,8 +141,8 @@
             }
             resD += d.getDate()
             console.log(resD)
-            values.add_date = resD
-            axios.post('/api/admin/insertUser', {
+            values.purchase_date = resD
+            axios.post('/api/admin/insertBook', {
               params: {
                 'data': values
               }

@@ -1,173 +1,268 @@
 <template>
-  <a-table :columns="columns" :dataSource="data" bordered>
-    <template
-      v-for="col in ['after_tax', 'bonus_float', 'check_float','individual_income_tax','meal_subsidy','salary_date']"
-      :slot="col"
-      slot-scope="text, record"
-    >
-      <div :key="col">
-        <a-input
-          v-if="record.editable"
-          style="margin: -5px 0"
-          :value="text"
-          @change="e => handleChange(e.target.value, record.key, col)"
-        />
-        <template
-          v-else
-        >{{ text }}</template>
-      </div>
-    </template>
-    <template slot="operation" slot-scope="text, record">
-      <div class="editable-row-operations">
-        <span v-if="record.editable">
-          <a @click="() => save(record.key)">Save</a>
-          <a-popconfirm title="Sure to cancel?" @confirm="() => cancel(record.key)">
-            <a>Cancel</a>
-          </a-popconfirm>
-        </span>
-        <span v-else>
-          <a @click="() => edit(record.key)">Edit</a>
-        </span>
-      </div>
-    </template>
-  </a-table>
-</template>
-<script>
-import axios from 'axios'
-const columns = [
-  {
-    title: '工资id',
-    dataIndex: 'salary_id',
-    sorter: (a, b) => a.salary_id > b.salary_id,
-    width: '15%',
-    scopedSlots: { customRender: 'salary_id' }
-  },
-  {
-    title: '税后工资',
-    sorter: (a, b) => a.after_tax - b.after_tax,
-    width: '10%',
-    dataIndex: 'after_tax',
-    scopedSlots: { customRender: 'after_tax' }
-  },
-  {
-    title: '奖金浮动',
-    sorter: (a, b) => a.bonus_float - b.bonus_float,
-    width: '10%',
-    dataIndex: 'bonus_float',
-    scopedSlots: { customRender: 'bonus_float' }
-  },
-  {
-    title: '考核浮动',
-    sorter: (a, b) => a.check_float - b.check_float,
-    width: '10%',
-    dataIndex: 'check_float',
-    scopedSlots: { customRender: 'check_float' }
-  },
-  {
-    title: '缴纳税务',
-    sorter: (a, b) => a.individual_income_tax - b.individual_income_tax,
-    width: '10%',
-    dataIndex: 'individual_income_tax',
-    scopedSlots: { customRender: 'individual_income_tax' }
-  },
-  {
-    title: '餐补',
-    sorter: (a, b) => a.meal_subsidy - b.meal_subsidy,
-    width: '10%',
-    dataIndex: 'meal_subsidy',
-    scopedSlots: { customRender: 'meal_subsidy' }
-  },
-  {
-    title: '发送日期',
-    sorter: (a, b) => a.salary_date > b.salary_date,
-    width: '10%',
-    dataIndex: 'salary_date',
-    scopedSlots: { customRender: 'salary_date' }
-  },
-  {
-    title: 'operation',
-    dataIndex: 'operation',
-    scopedSlots: { customRender: 'operation' }
-  }
-]
+  <a-card :bordered="false">
+    <div class="table-page-search-wrapper">
+      <a-form layout="inline">
+        <a-row :gutter="48">
+          <a-col :md="8" :sm="24">
+            <a-form-item label="规则编号">
+              <a-input v-model="queryParam.id" placeholder=""/>
+            </a-form-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
+            <a-form-item label="使用状态">
+              <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
+                <a-select-option value="0">全部</a-select-option>
+                <a-select-option value="1">借阅中</a-select-option>
+                <a-select-option value="2">已超期</a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+          <template v-if="advanced">
+            <a-col :md="8" :sm="24">
+              <a-form-item label="学号">
+                <a-input-number v-model="queryParam.callNo" style="width: 100%"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item label="借阅日期">
+                <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="请输入更新日期"/>
+              </a-form-item>
+            </a-col>
+          </template>
+          <a-col :md="!advanced && 8 || 24" :sm="24">
+            <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
+              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+              <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a @click="toggleAdvanced" style="margin-left: 8px">
+                {{ advanced ? '收起' : '展开' }}
+                <a-icon :type="advanced ? 'up' : 'down'"/>
+              </a>
+            </span>
+          </a-col>
+        </a-row>
+      </a-form>
+    </div>
 
-const data = []
-for (let i = 0; i < 100; i++) {
-  data.push({
-    key: i.toString(),
-    name: `Edrward ${i}`,
-    age: 32,
-    address: `London Park no. ${i}`
-  })
+    <div class="table-operator">
+      <a-button type="primary" icon="plus" @click="$refs.createModal.add()">新建</a-button>
+      <a-button type="dashed" @click="tableOption">{{ optionAlertShow && '关闭' || '开启' }} alert</a-button>
+      <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
+        <a-menu slot="overlay">
+          <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
+          <!-- lock | unlock -->
+          <a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>
+        </a-menu>
+        <a-button style="margin-left: 8px">
+          批量操作 <a-icon type="down" />
+        </a-button>
+      </a-dropdown>
+    </div>
+
+    <s-table
+      ref="table"
+      size="default"
+      rowKey="key"
+      :columns="columns"
+      :data="loadData"
+      :alert="options.alert"
+      :rowSelection="options.rowSelection"
+      showPagination="auto"
+    >
+      <span slot="serial" slot-scope="text, record, index">
+        {{ index + 1 }}
+      </span>
+      <span slot="status" slot-scope="text">
+        <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
+      </span>
+      <span slot="description" slot-scope="text">
+        <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
+      </span>
+
+      <span slot="action" slot-scope="text, record">
+        <template>
+          <a @click="handleEdit(record)">配置</a>
+          <a-divider type="vertical" />
+          <a @click="handleSub(record)">订阅报警</a>
+        </template>
+      </span>
+    </s-table>
+    <create-form ref="createModal" @ok="handleOk" />
+    <step-by-step-modal ref="modal" @ok="handleOk"/>
+  </a-card>
+</template>
+
+<script>
+import moment from 'moment'
+import { STable, Ellipsis } from '@/components'
+import StepByStepModal from './../list/modules/StepByStepModal'
+import CreateForm from './../list/modules/CreateForm'
+import { getRoleList, getServiceList } from '@/api/manage'
+import axios from 'axios'
+
+const statusMap = {
+  0: {
+    status: 'default',
+    text: '关闭'
+  },
+  1: {
+    status: 'processing',
+    text: '运行中'
+  },
+  2: {
+    status: 'success',
+    text: '已上线'
+  },
+  3: {
+    status: 'error',
+    text: '异常'
+  }
 }
+
 export default {
+  name: 'TableList',
+  components: {
+    STable,
+    Ellipsis,
+    CreateForm,
+    StepByStepModal
+  },
   data () {
-    this.cacheData = data.map(item => ({ ...item }))
     return {
-      data,
-      columns
+      mdl: {},
+      // 高级搜索 展开/关闭
+      advanced: false,
+      // 查询参数
+      queryParam: {},
+      // 表头
+      columns: [
+        {
+          title: '规则编号',
+          dataIndex: 'no'
+        },
+        {
+          title: '描述',
+          dataIndex: 'description',
+          scopedSlots: { customRender: 'description' }
+        },
+        {
+          title: '服务调用次数',
+          dataIndex: 'callNo',
+          sorter: true,
+          needTotal: true,
+          customRender: (text) => text + ' 次'
+        },
+        {
+          title: '状态',
+          dataIndex: 'status',
+          scopedSlots: { customRender: 'status' }
+        },
+        {
+          title: '更新时间',
+          dataIndex: 'updatedAt',
+          sorter: true
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          width: '150px',
+          scopedSlots: { customRender: 'action' }
+        }
+      ],
+      // 加载数据方法 必须为 Promise 对象
+      loadData: parameter => {
+        console.log('loadData.parameter', parameter)
+        // return getServiceList(Object.assign(parameter, this.queryParam))
+        //   .then(res => {
+        //     return res.result
+        //   })
+       let data = [{
+          'no':1,
+          'description':1,
+          'callNo':1,
+          'status':1,
+          'updatedAt':1,
+          'action':1
+        }];
+        return data
+      },
+      selectedRowKeys: [],
+      selectedRows: [],
+
+      // custom table alert & rowSelection
+      options: {
+        alert: { show: true, clear: () => { this.selectedRowKeys = [] } },
+        rowSelection: {
+          selectedRowKeys: this.selectedRowKeys,
+          onChange: this.onSelectChange
+        }
+      },
+      optionAlertShow: false
     }
   },
-  mounted () {
-    this.getData()
+  filters: {
+    statusFilter (type) {
+      return statusMap[type].text
+    },
+    statusTypeFilter (type) {
+      return statusMap[type].status
+    }
+  },
+  created () {
+    this.tableOption()
+    // getRoleList({ t: new Date() })
   },
   methods: {
-    getData () {
-      axios.post('/api/admin/salary', {
-        params: {
-          'username': this.$store.getters.userInfo.roleId
+    tableOption () {
+      if (!this.optionAlertShow) {
+        this.options = {
+          alert: { show: true, clear: () => { this.selectedRowKeys = [] } },
+          rowSelection: {
+            selectedRowKeys: this.selectedRowKeys,
+            onChange: this.onSelectChange,
+            getCheckboxProps: record => ({
+              props: {
+                disabled: record.no === 'No 2', // Column configuration not to be checked
+                name: record.no
+              }
+            })
+          }
         }
-      }).then(result => {
-        this.data = result.data.data
-      })
-    },
-    handleChange (value, key, column) {
-      const newData = [...this.data]
-      const target = newData.filter(item => key === item.key)[0]
-      if (target) {
-        target[column] = value
-        this.data = newData
-      }
-    },
-    edit (key) {
-      const newData = [...this.data]
-      const target = newData.filter(item => key === item.key)[0]
-      if (target) {
-        target.editable = true
-        this.data = newData
-      }
-    },
-    save (key) {
-      const newData = [...this.data]
-      const target = newData.filter(item => key === item.key)[0]
-      console.log(target)
-      axios.post('/api/admin/revise', {
-        params: {
-          data: target
+        this.optionAlertShow = true
+      } else {
+        this.options = {
+          alert: false,
+          rowSelection: null
         }
-      }).then(result => {
-        console.log('修改成功')
-      })
-      if (target) {
-        delete target.editable
-        this.data = newData
-        this.cacheData = newData.map(item => ({ ...item }))
+        this.optionAlertShow = false
       }
     },
-    cancel (key) {
-      const newData = [...this.data]
-      const target = newData.filter(item => key === item.key)[0]
-      if (target) {
-        Object.assign(target, this.cacheData.filter(item => key === item.key)[0])
-        delete target.editable
-        this.data = newData
+
+    handleEdit (record) {
+      console.log(record)
+      this.$refs.modal.edit(record)
+    },
+    handleSub (record) {
+      if (record.status !== 0) {
+        this.$message.info(`${record.no} 订阅成功`)
+      } else {
+        this.$message.error(`${record.no} 订阅失败，规则已关闭`)
+      }
+    },
+    handleOk () {
+      this.$refs.table.refresh()
+    },
+    onSelectChange (selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
+    },
+    toggleAdvanced () {
+      this.advanced = !this.advanced
+    },
+    resetSearchForm () {
+      this.queryParam = {
+        date: moment(new Date())
       }
     }
   }
 }
 </script>
-<style scoped>
-  .editable-row-operations a {
-    margin-right: 8px;
-  }
-</style>
