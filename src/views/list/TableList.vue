@@ -204,26 +204,22 @@ export default {
             res = {
               data:[
               {
-                'no':1,
+                'no':'1',
                 'studentNumber':1,
                 'studentName':1,
                 'status':1,
                 'recommendBook':1,
                 'recommendReason':1,
-                'loanTime':1,
-                'key':1,
-                'editable':false
+                'loanTime':1
               },
               {
-                'no':12,
+                'no':'12',
                 'studentNumber':12,
                 'studentName':12,
                 'status':1,
                 'recommendBook':12,
                 'recommendReason':1,
                 'loanTime':12,
-                'key':12,
-                'editable':false
               }
               ],
               pageNo:1,
@@ -235,7 +231,10 @@ export default {
             })
         
         }).then(res => {
-
+          res.data.forEach((item)=>{
+            item.key = item.no;
+            item.editable = false;
+          })
           this.data = res.data;
           return res
         })

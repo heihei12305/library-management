@@ -46,7 +46,9 @@ export default {
       console.log(1,this.form)
       axios.post('/api/user/security', {
         params: {
-          
+          'oldPassword': md5(this.form.oldPassword),
+          'password': md5(this.form.password),
+          'studentNumber':this.$store.getters.userInfo.creatorId
         }
       }).then(result => {
         

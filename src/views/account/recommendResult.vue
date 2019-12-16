@@ -48,7 +48,8 @@ export default {
           'author': this.form.author,
           'bookname': this.form.bookname,
           'cause': this.form.cause,
-          'press': this.form.press
+          'press': this.form.press,
+          'studentNumber':this.$store.getters.userInfo.creatorId
         }
       }).then(result => {
         

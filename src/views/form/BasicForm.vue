@@ -110,6 +110,7 @@
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
+import axios from "axios"
 const DataSet = require('@antv/data-set')
   export default {
     components: {
@@ -272,7 +273,8 @@ const DataSet = require('@antv/data-set')
       }
     },
     mounted () {
-      this.init()
+      this.init(),
+      this.getActivities()
     },
     methods:{
       init() {
@@ -285,6 +287,14 @@ const DataSet = require('@antv/data-set')
           value: 'score'
         })
         this.radarData = dv.rows;
+      },
+      getActivities(){
+        axios.get('/api/getActivities', {
+          params: {}
+        }).then(result => {
+          console.log(result.data)
+          this.activities = result.data;
+        })
       }
     }
   };

@@ -212,7 +212,7 @@ export default {
             res = {
               data:[
               {
-                'no':1,
+                'no':'1',
                 'studentNumber':1,
                 'studentName':1,
                 'status':1,
@@ -223,7 +223,7 @@ export default {
                 'editable':false
               },
               {
-                'no':12,
+                'no':'12',
                 'studentNumber':12,
                 'studentName':12,
                 'status':1,

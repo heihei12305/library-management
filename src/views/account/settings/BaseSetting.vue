@@ -14,15 +14,7 @@
           >
             <a-textarea rows="4" placeholder="You are not alone."/>
           </a-form-item>
-
-          <a-form-item
-            label="电子邮件"
-            :required="false"
-          >
-            <a-input placeholder="exp@admin.com"/>
-          </a-form-item>
          
-          
           <a-form-item>
             <a-button type="primary">提交</a-button>
             <a-button style="margin-left: 8px">保存</a-button>

@@ -225,29 +225,28 @@ export default {
   },
   methods: {
     getData () {
-      //axios.post('/api/admin/salary', {
-      //  params: {
-      //    'username': this.$store.getters.userInfo.roleId
-      //  }
-      //}).then(result => {
-      //  this.data = result.data.data
-      //})
-      this.data = [
-        {
-            'ISBN':1,
-            'bookname':1,
-            'author':1,
-            'booknumber':1,
-            'press':1,
-        },
-         {
-            'ISBN':2,
-            'bookname':2,
-            'author':2,
-            'booknumber':2,
-            'press':12,
-        }
-      ]
+      axios.get('/api/admin/getBook', {
+        params: {}
+      }).then(result => {
+        this.data = result.data.data
+      }).catch(err=>
+        this.data = [
+          {
+              'ISBN':1,
+              'bookname':1,
+              'author':1,
+              'booknumber':1,
+              'press':1,
+          },
+          {
+              'ISBN':2,
+              'bookname':2,
+              'author':2,
+              'booknumber':2,
+              'press':12,
+          }
+        ]
+      )
       this.data.forEach((item)=>item['key'] = item['ISBN'])
     },
     handleSearch (selectedKeys, confirm) {

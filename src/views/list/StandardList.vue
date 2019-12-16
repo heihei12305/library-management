@@ -183,7 +183,7 @@ const columns = [
     }
   },
   {
-    title: '价格',
+    title: '单价',
     width: '13%',
     dataIndex: 'price',
     key: 'price',
@@ -254,12 +254,18 @@ export default {
   },
   data () {
     return {
-      totalBook:0,
-      totalMoney:0,
       data: [],
       searchText: '',
       searchInput: null,
       columns
+    }
+  },
+  computed:{
+    totalBook(){
+      return this.data.reduce((acc,next)=>acc+next.bookNumber*1,0)
+    },
+    totalMoney(){
+      return this.data.reduce((acc,next)=>acc+next.bookNumber*next.price,0)
     }
   },
   mounted () {

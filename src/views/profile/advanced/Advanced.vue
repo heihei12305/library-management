@@ -206,21 +206,20 @@ export default {
   },
   methods: {
     getData () {
-      //axios.post('/api/admin/salary', {
-      //  params: {
-      //    'username': this.$store.getters.userInfo.roleId
-      //  }
-      //}).then(result => {
-      //  this.data = result.data.data
-      //})
-      this.data = [
-        {
-            'studentNumber':1,
-            'email':1,
-            'password':1,
-            'mobile':1
-        }
-      ]
+      axios.get('/api/admin/getUser', 
+        {}
+      ).then(result => {
+        this.data = result.data.data
+      }).catch(err=>
+        this.data = [
+          {
+              'studentNumber':1,
+              'email':1,
+              'password':1,
+              'mobile':1
+          }
+        ]
+      )
     },
     handleSearch (selectedKeys, confirm) {
       confirm()

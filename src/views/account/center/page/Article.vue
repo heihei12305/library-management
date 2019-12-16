@@ -4,7 +4,7 @@
       <div class="title">现借图书</div>
       <s-table
         style="margin-bottom: 24px"
-        row-key="id"
+        row-key="ISBN"
         :columns="goodsColumns"
         :data="loadGoodsData">
 
@@ -13,7 +13,7 @@
       <div class="title">历史借阅</div>
       <s-table
         style="margin-bottom: 24px"
-        row-key="key"
+        row-key="ISBN"
         :columns="scheduleColumns"
         :data="loadScheduleData">
 
@@ -47,29 +47,29 @@ export default {
       goodsColumns: [
         {
           title: 'ISBN',
-          dataIndex: 'id',
-          key: 'id'
+          dataIndex: 'ISBN',
+          key: 'ISBN'
         },
         {
           title: '书名',
-          dataIndex: 'name',
-          key: 'name'
+          dataIndex: 'bookName',
+          key: 'bookName'
         },
         {
           title: '作者',
-          dataIndex: 'barcode',
-          key: 'barcode'
+          dataIndex: 'author',
+          key: 'author'
         },
         {
           title: '借出时间',
-          dataIndex: 'price',
-          key: 'price',
+          dataIndex: 'loanTime',
+          key: 'loanTime',
           align: 'right'
         },
         {
           title: '可借时间',
-          dataIndex: 'num',
-          key: 'num',
+          dataIndex: 'canBorrowTime',
+          key: 'canBorrowTime',
           align: 'right'
         }
       ],
@@ -77,51 +77,36 @@ export default {
       loadGoodsData: () => {
         return new Promise(resolve => {
           console.log(1,this.$store.getters.userInfo)
-          // axios.get('/api/user/getOperation1', {
-          //     params: {}
-          //   }).then(result => {
-          //     this.operation1 = result.data;
-          //     resolve(result.data);
-          //   })
-          resolve({
-            data: [
-              {
-                id: '1234561',
-                name: '矿泉水 550ml',
-                barcode: '12421432143214321',
-                price: '2.00',
-                num: '1',
-                amount: '2.00'
-              },
-              {
-                id: '1234562',
-                name: '凉茶 300ml',
-                barcode: '12421432143214322',
-                price: '3.00',
-                num: '2',
-                amount: '6.00'
-              },
-              {
-                id: '1234563',
-                name: '好吃的薯片',
-                barcode: '12421432143214323',
-                price: '7.00',
-                num: '4',
-                amount: '28.00'
-              },
-              {
-                id: '1234564',
-                name: '特别好吃的蛋卷',
-                barcode: '12421432143214324',
-                price: '8.50',
-                num: '3',
-                amount: '25.50'
-              }
-            ],
-            pageSize: 10,
-            pageNo: 1,
-            totalPage: 1,
-            totalCount: 10
+          axios.get('/api/user/borrowingRecord', {
+               params: {
+                  'son':this.$store.getters.userInfo.creatorId
+                }
+            }).then(result => {
+              this.operation1 = result.data;
+              resolve(result.data);
+            }).catch(err=>{          
+              resolve({
+              data: [
+                {
+                  ISBN: '1234561',
+                  bookName: '矿泉水 550ml',
+                  author: '12421432143214321',
+                  loanTime: '2.00',
+                  canBorrowTime: '1',
+                },
+                {
+                  ISBN: '1234562',
+                  bookName: '凉茶 300ml',
+                  author: '12421432143214322',
+                  loanTime: '3.00',
+                  canBorrowTime: '2',
+                }
+              ],
+              pageSize: 10,
+              pageNo: 1,
+              totalPage: 1,
+              totalCount: 10
+            })
           })
         }).then(res => {
           return res
@@ -131,13 +116,13 @@ export default {
       scheduleColumns: [
         {
           title: 'ISBN',
-          dataIndex: 'time',
-          key: 'time'
+          dataIndex: 'ISBN',
+          key: 'ISBN'
         },
         {
           title: '书名',
-          dataIndex: 'rate',
-          key: 'rate'
+          dataIndex: 'bookName',
+          key: 'bookName'
         },
         {
           title: '状态',
@@ -147,64 +132,47 @@ export default {
         },
         {
           title: '借出时间',
-          dataIndex: 'operator',
-          key: 'operator'
+          dataIndex: 'loanTime',
+          key: 'loanTime'
         },
         {
           title: '还书时间',
-          dataIndex: 'cost',
-          key: 'cost'
+          dataIndex: 'returnTime',
+          key: 'returnTime'
         }
       ],
       loadScheduleData: () => {
         return new Promise(resolve => {
+          axios.get('/api/user/borrowRecord', {
+               params: {
+                  'son':this.$store.getters.userInfo.creatorId
+                }
+            }).then(result => {
+              this.operation1 = result.data;
+              resolve(result.data);
+            }).catch(err=>{    
           resolve({
             data: [
               {
-                key: '1',
-                time: '2017-10-01 14:10',
-                rate: '联系客户',
+                ISBN: '2017-10-01 14:10',
+                bookName: '联系客户',
                 status: 'processing',
-                operator: '取货员 ID1234',
-                cost: '5mins'
+                loanTime: '取货员 ID1234',
+                returnTime: '5mins'
               },
               {
-                key: '2',
-                time: '2017-10-01 14:05',
-                rate: '取货员出发',
-                status: 'success',
-                operator: '取货员 ID1234',
-                cost: '1h'
-              },
-              {
-                key: '3',
-                time: '2017-10-01 13:05',
-                rate: '取货员接单',
-                status: 'success',
-                operator: '取货员 ID1234',
-                cost: '5mins'
-              },
-              {
-                key: '4',
-                time: '2017-10-01 13:00',
-                rate: '申请审批通过',
-                status: 'success',
-                operator: '系统',
-                cost: '1h'
-              },
-              {
-                key: '5',
-                time: '2017-10-01 12:00',
-                rate: '发起退货申请',
-                status: 'success',
-                operator: '用户',
-                cost: '5mins'
+                ISBN: '2017-10-01 14:05',
+                bookName: '取货员出发',
+                status: 'error',
+                loanTime: '取货员 ID1234',
+                returnTime: '1h'
               }
             ],
             pageSize: 10,
             pageNo: 1,
             totalPage: 1,
             totalCount: 10
+            })
           })
         }).then(res => {
           return res
@@ -215,9 +183,9 @@ export default {
   filters: {
     statusFilter (status) {
       const statusMap = {
-        'processing': '进行中',
-        'success': '完成',
-        'failed': '失败'
+        'processing': '借阅中',
+        'success': '已还',
+        'error': '超期'
       }
       return statusMap[status]
     }
