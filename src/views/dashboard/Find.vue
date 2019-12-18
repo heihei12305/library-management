@@ -229,7 +229,8 @@ export default {
         params: {}
       }).then(result => {
         this.data = result.data.data
-      }).catch(err=>
+        this.data.forEach((item)=>item['key'] = item['ISBN'])
+      }).catch(err=>{
         this.data = [
           {
               'ISBN':1,
@@ -246,8 +247,9 @@ export default {
               'press':12,
           }
         ]
+        
+        this.data.forEach((item)=>item['key'] = item['ISBN'])}
       )
-      this.data.forEach((item)=>item['key'] = item['ISBN'])
     },
     handleSearch (selectedKeys, confirm) {
       confirm()
@@ -267,7 +269,6 @@ export default {
       }
     },
     onDelete (key) {
-      console.log(key)
       const dataSource = [...this.data]
       console.log(dataSource)
       this.data = dataSource.filter(item => item.key !== key)

@@ -52,7 +52,7 @@
     >
      
       <template
-        v-for="col in ['studentNumber','studentName','status','updatedAt','loanTime']"
+        v-for="col in ['studentNumber','deadLine','bookName','studentName','status','updatedAt','loanTime']"
         :slot="col"
         slot-scope="text, record"
         >
@@ -94,14 +94,14 @@
             <a @click="() => edit(record.key)">Edit</a>
           </span>
         <!-- </div> -->
-        <a-popconfirm
+        <!-- <a-popconfirm
           style="margin:0 0 0 15px"
           v-if="loadData.length"
           title="Sure to delete?"
           @confirm="() => onDelete(record.key)"
         >
           <a href="javascript:;">Delete</a>
-        </a-popconfirm>
+        </a-popconfirm> -->
       </template>
       </span>
     </s-table>
@@ -155,42 +155,62 @@ export default {
           scopedSlots: { customRender: 'serial' }
         },
         {
+          title: 'ISBN',
+          dataIndex: 'ISBN',
+          width: '12%',
+          scopedSlots: { customRender: 'ISBN' },
+          sorter: (a, b) => a.ISBN > b.ISBN,
+        },
+        {
+          title: '书名',
+          dataIndex: 'bookName',
+          width: '12%',
+          scopedSlots: { customRender: 'bookName' }
+        },
+        {
           title: '学号',
           dataIndex: 'studentNumber',
-          width: '15%',
+          width: '12%',
           scopedSlots: { customRender: 'studentNumber' },
           sorter: (a, b) => a.studentNumber > b.studentNumber,
         },
         {
           title: '姓名',
           dataIndex: 'studentName',
-          width: '15%',
+          width: '12%',
           scopedSlots: { customRender: 'studentName' }
         },
         {
           title: '借阅日期',
           dataIndex: 'loanTime',
-          width: '15%',
+          width: '12%',
           scopedSlots: { customRender: 'loanTime' },
           sorter: (a, b) => a.studentNumber > b.studentNumber,
         },
         {
           title: '状态',
           dataIndex: 'status',
-          width: '15%',
+          width: '12%',
           scopedSlots: { customRender: 'status' }
+        },
+        {
+          title: '应还时间',
+          dataIndex: 'deadLine',
+          width: '12%',
+          scopedSlots: { customRender: 'deadLine' },
+          sorter: (a, b) => a.deadLine > b.deadLine
         },
         {
           title: '还书时间',
           dataIndex: 'updatedAt',
-          width: '15%',
+          width: '12%',
           scopedSlots: { customRender: 'updatedAt' },
           sorter: (a, b) => a.updatedAt > b.updatedAt,
         },
         {
           title: '操作',
           dataIndex: 'action',
-          width: '15%',
+          width: '12%',
           scopedSlots: { customRender: 'action' }
         }
       ],
@@ -219,6 +239,9 @@ export default {
                 'updatedAt':1,
                 'action':1,
                 'loanTime':1,
+                'deadLine':1,
+                'ISBN':1,
+                'bookName':'1',
                 'key':1,
                 'editable':false
               },
@@ -230,6 +253,9 @@ export default {
                 'updatedAt':12,
                 'action':1,
                 'loanTime':12,
+                'deadLine':1,
+                'ISBN':1,
+                'bookName':'1',
                 'key':12,
                 'editable':false
               }

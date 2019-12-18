@@ -67,9 +67,9 @@ export default {
           align: 'right'
         },
         {
-          title: '可借时间',
-          dataIndex: 'canBorrowTime',
-          key: 'canBorrowTime',
+          title: '应还时间',
+          dataIndex: 'deadline',
+          key: 'deadline',
           align: 'right'
         }
       ],
@@ -92,14 +92,14 @@ export default {
                   bookName: '矿泉水 550ml',
                   author: '12421432143214321',
                   loanTime: '2.00',
-                  canBorrowTime: '1',
+                  deadline: '1',
                 },
                 {
                   ISBN: '1234562',
                   bookName: '凉茶 300ml',
                   author: '12421432143214322',
                   loanTime: '3.00',
-                  canBorrowTime: '2',
+                  deadline: '2',
                 }
               ],
               pageSize: 10,
