@@ -29,7 +29,7 @@
             :bordered="false"
             title="近期热门图书"
             :body-style="{ padding: 0 }">
-            <a slot="extra">全部图书</a>
+            <!-- <a slot="extra">全部图书</a> -->
             <div>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in books">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
@@ -80,7 +80,7 @@
               <a>我的图书馆</a>
               <a>电子图书</a>
               <a>CADAL</a>
-              <a-button size="small" type="primary" ghost icon="plus">添加</a-button>
+              <!-- <a-button size="small" type="primary" ghost icon="plus">添加</a-button> -->
             </div>
           </a-card>
           <a-card title="图书馆近期概况" style="margin-bottom: 24px" :loading="radarLoading" :bordered="false" :body-style="{ padding: 0 }">

@@ -53,7 +53,7 @@
               提交
             </a-button>
             <a-button :style="{ marginLeft: '8px' }" @click="handleReset">
-              全部置空
+              重置
             </a-button>
             <!-- <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="toggle">
               Collapse <a-icon :type="expand ? 'up' : 'down'" />
