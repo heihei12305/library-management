@@ -34,7 +34,7 @@
             <a-form-item label="添加日期">
               <a-date-picker
                 v-decorator="[
-                  columns[3]['dataIndex'],
+                  columns[2]['dataIndex'],
                   {
                     rules: [
                       {
@@ -91,10 +91,10 @@
       'title': '初始密码',
       'dataIndex': 'initPassword'
     },
-    {
-      'title': '管理员名称',
-      'dataIndex': 'adminName'
-    },
+    // {
+    //   'title': '管理员名称',
+    //   'dataIndex': 'adminName'
+    // },
     {
       'title': '添加日期',
       'dataIndex': 'add_date'

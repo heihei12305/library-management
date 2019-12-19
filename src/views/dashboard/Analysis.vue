@@ -52,7 +52,7 @@
     >
      
       <template
-        v-for="col in ['studentNumber','deadLine','bookName','studentName','status','updatedAt','loanTime']"
+        v-for="col in ['studentNumber','deadline','bookName','studentName','status','updatedAt','loanTime']"
         :slot="col"
         slot-scope="text, record"
         >
@@ -198,10 +198,10 @@ export default {
         },
         {
           title: '应还时间',
-          dataIndex: 'deadLine',
+          dataIndex: 'deadline',
           width: '10%',
-          scopedSlots: { customRender: 'deadLine' },
-          sorter: (a, b) => a.deadLine > b.deadLine
+          scopedSlots: { customRender: 'deadline' },
+          sorter: (a, b) => a.deadline > b.deadline
         },
         {
           title: '还书时间',
@@ -241,7 +241,7 @@ export default {
                 'updatedAt':1,
                 'action':1,
                 'loanTime':1,
-                'deadLine':1,
+                'deadline':1,
                 'ISBN':1,
                 'bookName':'1',
                 'key':1,
@@ -255,7 +255,7 @@ export default {
                 'updatedAt':12,
                 'action':1,
                 'loanTime':12,
-                'deadLine':1,
+                'deadline':1,
                 'ISBN':1,
                 'bookName':'1',
                 'key':12,

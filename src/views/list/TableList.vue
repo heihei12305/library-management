@@ -52,7 +52,7 @@
     >
      
       <template
-        v-for="col in ['studentName','status','recommendReason','recommendBook','loanTime']"
+        v-for="col in ['studentName','status','recommendReason','recommendBook']"
         :slot="col"
         slot-scope="text, record"
         >
@@ -165,17 +165,17 @@ export default {
           scopedSlots: { customRender: 'recommendBook' },
         },
         {
+          title: 'ISBN',
+          dataIndex: 'ISBN',
+          width: '13%',
+          scopedSlots: { customRender: 'ISBN' },
+          sorter: (a, b) => a.studentNumber > b.studentNumber,
+        },
+        {
           title: '推荐理由',
           dataIndex: 'recommendReason',
           width: '13%',
           scopedSlots: { customRender: 'recommendReason' },
-        },
-        {
-          title: '推荐日期',
-          dataIndex: 'loanTime',
-          width: '13%',
-          scopedSlots: { customRender: 'loanTime' },
-          sorter: (a, b) => a.studentNumber > b.studentNumber,
         },
         {
           title: '状态',
@@ -214,7 +214,7 @@ export default {
                 'status':1,
                 'recommendBook':1,
                 'recommendReason':1,
-                'loanTime':1
+                'ISBN':1
               },
               {
                 'no':'12',
@@ -223,7 +223,7 @@ export default {
                 'status':1,
                 'recommendBook':12,
                 'recommendReason':1,
-                'loanTime':12,
+                'ISBN':12,
               }
               ],
               pageNo:1,
