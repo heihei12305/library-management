@@ -248,7 +248,6 @@ export default {
       }
     },
     onDelete (key) {
-      alert(key)
       const dataSource = [...this.data]
       console.log(dataSource)
       this.data = dataSource.filter(item => item.key !== key)
