@@ -4,7 +4,7 @@
         <editable-cell :text="text" @change="onCellChange(record.key, 'name', $event)" />
       </template>
        <template
-        v-for="col in [ 'email', 'password','mobile']"
+        v-for="col in [ 'email','mobile']"
         :slot="col"
         slot-scope="text, record"
       >
@@ -106,7 +106,7 @@ import EditableCell from './../../dashboard/EditableCell'
 const columns = [
  {
     title: '学号',
-    width: '19%',
+    width: '24%',
     dataIndex: 'studentNumber',
     key: 'studentNumber',
     sorter: (a, b) => a.studentNumber > b.studentNumber,
@@ -127,7 +127,7 @@ const columns = [
   {
     title: '邮箱',
     dataIndex: 'email',
-    width: '19%',
+    width: '24%',
     key: 'email',
     scopedSlots: {
       filterDropdown: 'filterDropdown',
@@ -143,28 +143,28 @@ const columns = [
       }
     }
   },
-  {
-    title: '密码',
-    width: '19%',
-    dataIndex: 'password',
-    key: 'password',
-    scopedSlots: {
-      filterDropdown: 'filterDropdown',
-      filterIcon: 'filterIcon',
-      customRender: 'password'
-    },
-    onFilter: (value, record) => record.password.toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: visible => {
-      if (visible) {
-        setTimeout(() => {
-          this.searchInput.focus()
-        }, 0)
-      }
-    }
-  },
+  //{
+  //  title: '密码',
+  //  width: '19%',
+  //  dataIndex: 'password',
+  //  key: 'password',
+  //  scopedSlots: {
+  //    filterDropdown: 'filterDropdown',
+  //    filterIcon: 'filterIcon',
+  //    customRender: 'password'
+  //  },
+  //  onFilter: (value, record) => record.password.toString().toLowerCase().includes(value.toLowerCase()),
+  //  onFilterDropdownVisibleChange: visible => {
+  //    if (visible) {
+  //      setTimeout(() => {
+  //        this.searchInput.focus()
+  //      }, 0)
+  //    }
+  //  }
+  //}, 
   {
     title: '手机号',
-    width: '19%',
+    width: '30%',
     dataIndex: 'mobile',
     key: 'mobile',
     sorter: (a, b) => a.mobile > b.mobile,
@@ -210,15 +210,24 @@ export default {
         {}
       ).then(result => {
         this.data = result.data.data
-      }).catch(err=>
+        this.data.forEach((item)=>item.key = item.studentNumber)
+      }).catch(err=>{
         this.data = [
           {
               'studentNumber':1,
               'email':1,
               'password':1,
               'mobile':1
+          },
+           {
+              'studentNumber':2,
+              'email':2,
+              'password':2,
+              'mobile':2
           }
         ]
+        this.data.forEach((item)=>item.key = item.studentNumber)
+        }
       )
     },
     handleSearch (selectedKeys, confirm) {
@@ -239,7 +248,7 @@ export default {
       }
     },
     onDelete (key) {
-      console.log(key)
+      alert(key)
       const dataSource = [...this.data]
       console.log(dataSource)
       this.data = dataSource.filter(item => item.key !== key)
