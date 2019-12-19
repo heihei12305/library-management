@@ -50,14 +50,14 @@
         <a-row>
           <a-col :span="24" :style="{ textAlign: 'right' }">
             <a-button type="primary" html-type="submit">
-              submit
+              提交
             </a-button>
             <a-button :style="{ marginLeft: '8px' }" @click="handleReset">
-              Clear
+              全部置空
             </a-button>
-            <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="toggle">
+            <!-- <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="toggle">
               Collapse <a-icon :type="expand ? 'up' : 'down'" />
-            </a>
+            </a> -->
           </a-col>
         </a-row>
       </a-form>

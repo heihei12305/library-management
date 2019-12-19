@@ -23,22 +23,22 @@
       <template slot="operation" slot-scope="text, record">
         <!-- <div class="editable-row-operations"> -->
           <span v-if="record.editable">
-            <a @click="() => save(record.key)" style="margin-right:8px">Save</a>
-            <a-popconfirm title="Sure to cancel?" @confirm="() => cancel(record.key)">
-              <a>Cancel</a>
+            <a @click="() => save(record.key)" style="margin-right:8px">保存</a>
+            <a-popconfirm title="确定取消？" @confirm="() => cancel(record.key)">
+              <a>取消</a>
             </a-popconfirm>
           </span>
           <span v-else>
-            <a @click="() => edit(record.key)">Edit</a>
+            <a @click="() => edit(record.key)">编辑</a>
           </span>
         <!-- </div> -->
         <a-popconfirm
           style="margin:0 0 0 15px"
           v-if="data.length"
-          title="Sure to delete?"
+          title="确定删除?"
           @confirm="() => onDelete(record.key)"
         >
-          <a href="javascript:;">Delete</a>
+          <a href="javascript:;">删除</a>
         </a-popconfirm>
       </template>
     <div

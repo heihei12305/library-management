@@ -7,10 +7,10 @@
       <template slot="operation" slot-scope="text, record">
         <a-popconfirm
           v-if="dataSource.length"
-          title="Sure to delete?"
+          title="确定删除?"
           @confirm="() => onDelete(record.key)"
         >
-          <a href="javascript:;">Delete</a>
+          <a href="javascript:;">删除</a>
         </a-popconfirm>
       </template>
     </a-table>

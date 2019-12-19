@@ -85,13 +85,13 @@
         <template>
         <!-- <div class="editable-row-operations"> -->
           <span v-if="record.editable">
-            <a @click="() => save(record.key)" style="margin-right:8px">Save</a>
-            <a-popconfirm title="Sure to cancel?" @confirm="() => cancel(record.key)">
-              <a>Cancel</a>
+            <a @click="() => save(record.key)" style="margin-right:8px">保存</a>
+            <a-popconfirm title="确定取消?" @confirm="() => cancel(record.key)">
+              <a>取消</a>
             </a-popconfirm>
           </span>
           <span v-else>
-            <a @click="() => edit(record.key)">Edit</a>
+            <a @click="() => edit(record.key)">编辑</a>
           </span>
         <!-- </div> -->
         <!-- <a-popconfirm
