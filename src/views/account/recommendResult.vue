@@ -54,6 +54,9 @@ export default {
       }).then(result => {
         
       })
+    },
+    goHomeHandle () {
+      this.$router.push({ name: 'login' })
     }
   }
 }
