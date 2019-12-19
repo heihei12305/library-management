@@ -47,7 +47,7 @@
         ></a-input>
       </a-form-item>
       <a-form-item>
-        <a-input size="large" placeholder="12 位学号" v-decorator="['studentNumber', {rules: [{ required: true, message: '请输入正确的学号', pattern: /[123456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
+        <a-input size="large" placeholder="12位或者13位学号" v-decorator="['studentNumber', {rules: [{ required: true, message: '请输入正确的学号', pattern: /^[1-9]([\d]{11}|[\d]{12})$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
         </a-input>
       </a-form-item>
       <a-form-item>

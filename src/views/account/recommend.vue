@@ -7,7 +7,7 @@
           size="large"
           type="text"
           placeholder="ISBN"
-          v-decorator="['ISBN', {rules: [{ required: true,  message: '请输入正确的ISBN' ,pattern:  /\S/}], validateTrigger: ['change', 'blur']}]"
+          v-decorator="['ISBN', {rules: [{ required: true,  message: '请输入正确的ISBN' ,pattern:  /((ISBN(-13)?:?s)?97[89][-s]?[0-9][-s]?[0-9]{3}[-s]?[0-9]{5}[-s]?[0-9]|(ISBN(-10)?:?s)?[0-9][-s]?[0-9]{3}[-s]?[0-9]{5}[-s]?[0-9x])/}], validateTrigger: ['change', 'blur']}]"
         ></a-input>
       </a-form-item>
 

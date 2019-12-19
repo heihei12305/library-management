@@ -3,16 +3,58 @@
       <div>手动输入：</div>
       <a-form class="ant-advanced-search-form" :form="form" @submit="handleSearch">
         <a-row :gutter="24">
+           <a-col
+            :key="8"
+            :span="8"
+            :style="{ display: 'block' }"
+          >
+            <a-form-item label="ISBN">
+              <a-input
+                v-decorator="[
+                  columns[0]['dataIndex'],
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入正确的ISBN!',
+                        pattern: /((ISBN(-13)?:?s)?97[89][-s]?[0-9][-s]?[0-9]{3}[-s]?[0-9]{5}[-s]?[0-9]|(ISBN(-10)?:?s)?[0-9][-s]?[0-9]{3}[-s]?[0-9]{5}[-s]?[0-9x])/
+                      },
+                    ],
+                  },
+                ]" />
+            </a-form-item>
+          </a-col>
+           <a-col
+            :key="8"
+            :span="8"
+            :style="{ display: 'block' }"
+          >
+            <a-form-item label="可借数量">
+              <a-input
+                v-decorator="[
+                  columns[1]['dataIndex'],
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入非负整数!',
+                        pattern: /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/
+                      },
+                    ],
+                  },
+                ]" />
+            </a-form-item>
+          </a-col>
           <a-col
-            v-for="i in columns.length-1"
+            v-for="i in columns.length-3"
             :key="i"
             :span="8"
             :style="{ display: 'block'}"
           >
-            <a-form-item :label="`${columns[i-1]['title']}`">
+            <a-form-item :label="`${columns[i+1]['title']}`">
               <a-input
                 v-decorator="[
-                  `${columns[i-1]['dataIndex']}`,
+                  `${columns[i+1]['dataIndex']}`,
                   {
                     rules: [
                       {
@@ -40,6 +82,7 @@
                       {
                         required: true,
                         message: 'Input something!',
+                        pattern: /[123456789]\d{9}$/
                       },
                     ],
                   },
@@ -87,16 +130,16 @@
       'dataIndex': 'ISBN'
     },
     {
+      'title': '可借数量',
+      'dataIndex': 'booknumber'
+    },
+    {
       'title': '书名',
       'dataIndex': 'bookname'
     },
     {
       'title': '作者',
       'dataIndex': 'author'
-    },
-    {
-      'title': '可借数量',
-      'dataIndex': 'booknumber'
     },
     {
       'title': '出版社',
