@@ -85,13 +85,16 @@
         <template>
         <!-- <div class="editable-row-operations"> -->
           <span v-if="record.editable">
-            <a @click="() => save(record.key)" style="margin-right:8px">保存</a>
+            <!-- <a @click="() => save(record.key)" style="margin-right:8px">保存</a> -->
+            <a-button @click="() => save(record.key)" type="primary" size="small">保存</a-button>
             <a-popconfirm title="确定取消?" @confirm="() => cancel(record.key)">
-              <a>取消</a>
+              <!-- <a>取消</a> -->
+               <a-button type="primary" style="margin-left:8px" size="small">取消</a-button>
             </a-popconfirm>
           </span>
           <span v-else>
-            <a @click="() => edit(record.key)">编辑</a>
+            <!-- <a @click="() => edit(record.key)">编辑</a> -->
+             <a-button @click="() => edit(record.key)" type="primary">编辑</a-button>
           </span>
         <!-- </div> -->
         <!-- <a-popconfirm
@@ -150,21 +153,21 @@ export default {
       queryParam: {},
       // 表头
       columns: [
-        {
-          title: '#',
-          scopedSlots: { customRender: 'serial' }
-        },
+        // {
+        //   title: '#',
+        //   scopedSlots: { customRender: 'serial' }
+        // },
         {
           title: 'ISBN',
           dataIndex: 'ISBN',
-          width: '12%',
+          width: '10%',
           scopedSlots: { customRender: 'ISBN' },
           sorter: (a, b) => a.ISBN > b.ISBN,
         },
         {
           title: '书名',
           dataIndex: 'bookName',
-          width: '12%',
+          width: '10%',
           scopedSlots: { customRender: 'bookName' }
         },
         {
@@ -177,33 +180,33 @@ export default {
         {
           title: '姓名',
           dataIndex: 'studentName',
-          width: '12%',
+          width: '8%',
           scopedSlots: { customRender: 'studentName' }
         },
         {
           title: '借阅日期',
           dataIndex: 'loanTime',
-          width: '12%',
+          width: '10%',
           scopedSlots: { customRender: 'loanTime' },
           sorter: (a, b) => a.studentNumber > b.studentNumber,
         },
         {
           title: '状态',
           dataIndex: 'status',
-          width: '12%',
+          width: '8%',
           scopedSlots: { customRender: 'status' }
         },
         {
           title: '应还时间',
           dataIndex: 'deadLine',
-          width: '12%',
+          width: '10%',
           scopedSlots: { customRender: 'deadLine' },
           sorter: (a, b) => a.deadLine > b.deadLine
         },
         {
           title: '还书时间',
           dataIndex: 'updatedAt',
-          width: '12%',
+          width: '10%',
           scopedSlots: { customRender: 'updatedAt' },
           sorter: (a, b) => a.updatedAt > b.updatedAt,
         },
