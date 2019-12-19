@@ -81,8 +81,7 @@
                     rules: [
                       {
                         required: true,
-                        message: 'Input something!',
-                        pattern: /[123456789]\d{9}$/
+                        message: 'Input something',
                       },
                     ],
                   },

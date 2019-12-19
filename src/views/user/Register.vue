@@ -3,6 +3,10 @@
     <h3><span>注册</span></h3>
     <a-form ref="formRegister" :form="form" id="formRegister">
       <a-form-item>
+        <a-input size="large" placeholder="请输入姓名" v-decorator="['studentName', {rules: [{ required: true, message: '请输入正确的姓名'}, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
+        </a-input>
+      </a-form-item>
+      <a-form-item>
         <a-input
           size="large"
           type="text"
