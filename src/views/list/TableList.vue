@@ -199,7 +199,7 @@ export default {
           }).then(result => {
             res = result.data;
             resolve(res);
-            this.$refs.table.refresh(true)
+            // this.$refs.table.refresh(true)
           }).catch(err=>{
             res = {
               data:[
