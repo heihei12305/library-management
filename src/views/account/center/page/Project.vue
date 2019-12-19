@@ -185,7 +185,7 @@ export default {
        console.log(2,this.$store.getters.userInfo.creatorId)
        axios.get('/api/user/getOperation1', {
          params: {
-           'son':this.$store.getters.userInfo.creatorId
+           'sno':this.$store.getters.userInfo.creatorId
          }
       }).then(result => {
         console.log(result.data)

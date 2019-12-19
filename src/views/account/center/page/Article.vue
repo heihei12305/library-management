@@ -79,7 +79,7 @@ export default {
           console.log(1,this.$store.getters.userInfo)
           axios.get('/api/user/borrowingRecord', {
                params: {
-                  'son':this.$store.getters.userInfo.creatorId
+                  'sno':this.$store.getters.userInfo.creatorId
                 }
             }).then(result => {
               this.operation1 = result.data;
@@ -145,7 +145,7 @@ export default {
         return new Promise(resolve => {
           axios.get('/api/user/borrowRecord', {
                params: {
-                  'son':this.$store.getters.userInfo.creatorId
+                  'sno':this.$store.getters.userInfo.creatorId
                 }
             }).then(result => {
               this.operation1 = result.data;
