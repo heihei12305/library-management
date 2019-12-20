@@ -388,22 +388,29 @@ export default {
     save (key) {
       const newData = [...this.data]
       const target = newData.filter(item => key === item.key)[0]
-      console.log(target)
-      axios.post('/api/admin/reviseRecord', {
-        params: {
-          data: target
-        }
-      }).then(result => {
-        this.$message.success('修改成功！') 
-        this.$refs.table.refresh(true)
-      }).catch(err => {
-        this.$message.error('修改失败！') 
-        this.$refs.table.refresh(true)
-      })
       if (target) {
-        delete target.editable
-        this.data = newData
-        this.cacheData = newData.map(item => ({ ...item }))
+        let statusList = [1,2,3]
+        if(statusList.indexOf(Number(target.status))===-1){
+          this.$message.error('状态只能对应1(已购)2(已拒绝)3(未处理)！') 
+        }else{
+          console.log(target)
+          axios.post('/api/admin/reviseRecord', {
+            params: {
+              data: target
+            }
+          }).then(result => {
+            this.$message.success('修改成功！') 
+            this.$refs.table.refresh(true)
+          }).catch(err => {
+            this.$message.error('修改失败！') 
+            this.$refs.table.refresh(true)
+          })
+          if (target) {
+            delete target.editable
+            this.data = newData
+            this.cacheData = newData.map(item => ({ ...item }))
+          }
+        }
       }
     },
     cancel (key) {

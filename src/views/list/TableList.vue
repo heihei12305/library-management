@@ -356,7 +356,8 @@ export default {
       const newData = [...this.data]
       const target = newData.filter(item => key === item.key)[0]
       if (target) {
-        if(target.status!==1 && target.status!==2 && target.status!==3  ){
+        let statusList = [1,2,3]
+        if(statusList.indexOf(Number(target.status))===-1){
           this.$message.error('状态只能对应1(已购)2(已拒绝)3(未处理)！') 
         }else{
       console.log(target)
