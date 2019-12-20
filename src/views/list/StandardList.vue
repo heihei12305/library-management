@@ -284,6 +284,7 @@ export default {
         }
       }).then(result => {
         this.data = result.data.data
+         this.data.forEach((item)=>item['key'] = item['ISBN'])
       })
       this.data = [
         {
@@ -293,8 +294,17 @@ export default {
             'bookNumber':1,
             'price':1,
             'press':1
+        },
+        {
+            'ISBN':12,
+            'bookname':1,
+            'author':1,
+            'bookNumber':1,
+            'price':1,
+            'press':1
         }
       ]
+       this.data.forEach((item)=>item['key'] = item['ISBN'])
     },
     handleSearch (selectedKeys, confirm) {
       confirm()
@@ -356,9 +366,15 @@ export default {
         console.log('修改成功')
       })
       if (target) {
-        delete target.editable
-        this.data = newData
-        this.cacheData = newData.map(item => ({ ...item }))
+        if(target.bookNumber<0){
+          this.$message.error('图书数量不能小于0！') 
+        }else if(target.price<0){
+          this.$message.error('单价不能小于0！') 
+        }else{
+          delete target.editable
+          this.data = newData
+          this.cacheData = newData.map(item => ({ ...item }))
+        }
       }
     },
     cancel (key) {
