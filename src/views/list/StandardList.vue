@@ -297,11 +297,11 @@ export default {
         },
         {
             'ISBN':12,
-            'bookname':1,
-            'author':1,
-            'bookNumber':1,
-            'price':1,
-            'press':1
+            'bookname':12,
+            'author':12,
+            'bookNumber':12,
+            'price':12,
+            'press':12
         }
       ]
        this.data.forEach((item)=>item['key'] = item['ISBN'])

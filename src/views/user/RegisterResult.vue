@@ -49,7 +49,8 @@ export default {
           'email': this.form.email,
           'mobile': this.form.mobile,
           'password': md5(this.form.password),
-          'studentNumber': this.form.studentNumber
+          'studentNumber': this.form.studentNumber,
+          'studentName': this.form.studentName
         }
       }).then(result => {
         

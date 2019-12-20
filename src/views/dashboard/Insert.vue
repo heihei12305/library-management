@@ -44,17 +44,38 @@
                   },
                 ]" />
             </a-form-item>
+         </a-col>
+        <a-col
+            :key="8"
+            :span="8"
+            :style="{ display: 'block' }"
+          >
+             <a-form-item label="详情链接">
+              <a-input
+                v-decorator="[
+                  columns[2]['dataIndex'],
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入正确链接!',
+                        pattern: /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/
+                      },
+                    ],
+                  },
+                ]" />
+            </a-form-item>
           </a-col>
           <a-col
-            v-for="i in columns.length-3"
+            v-for="i in columns.length-4"
             :key="i"
             :span="8"
             :style="{ display: 'block'}"
           >
-            <a-form-item :label="`${columns[i+1]['title']}`">
+            <a-form-item :label="`${columns[i+2]['title']}`">
               <a-input
                 v-decorator="[
-                  `${columns[i+1]['dataIndex']}`,
+                  `${columns[i+2]['dataIndex']}`,
                   {
                     rules: [
                       {
@@ -133,6 +154,10 @@
       'dataIndex': 'booknumber'
     },
     {
+      'title': '详情链接',
+      'dataIndex': 'link'
+    },
+    {
       'title': '书名',
       'dataIndex': 'bookname'
     },
@@ -143,10 +168,6 @@
     {
       'title': '出版社',
       'dataIndex': 'press'
-    },
-    {
-      'title': '详情链接',
-      'dataIndex': 'link'
     },
     {
       'title': '描述',
